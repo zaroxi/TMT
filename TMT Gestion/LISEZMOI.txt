@@ -1,0 +1,1653 @@
+﻿TMT GESTION — VERSION BASE DE DONNÉES (SQL)
+Pointage des trajets, rapports, facture — STE TAKE ME TRANS
+===========================================================
+
+Mêmes écrans, mêmes calculs, mêmes règles que la version précédente.
+Ce qui change : vos données ne sont plus dans un fichier Excel ouvert par Edge,
+mais dans une vraie base de données (fichier TMT.db), gérée par un petit
+programme (le « serveur TMT Gestion ») qui tourne sur l'ordinateur principal.
+
+Ce que vous y gagnez :
+- chaque modification est enregistrée aussitôt, en une fraction de seconde,
+  même avec plusieurs années de fiches ;
+- plus de fichier à « ouvrir » ni d'autorisation Edge à chaque démarrage ;
+- une copie de sauvegarde automatique chaque jour (30 jours + une par mois) ;
+- plus d'années à ouvrir ni à fermer : toutes les années restent dans la base ;
+- si vous le souhaitez, plusieurs ordinateurs du bureau peuvent travailler EN
+  MÊME TEMPS sur les mêmes données ;
+- chaque personne a son compte (identifiant + mot de passe) et ne voit que ce
+  que vous lui autorisez (par ex. le pointage sans les prix).
+
+Contenu du dossier
+- Lancer TMT Gestion.bat ................ démarre le serveur et ouvre l'application
+- Installer le raccourci.vbs ............ crée l'icône « TMT Gestion » sur le Bureau
+- Mot de passe oublie.bat ............... nouveau mot de passe pour un compte
+- serveur\ .............................. le programme (ne rien modifier)
+- donnees\ .............................. créé au 1er lancement : TMT.db, sauvegardes,
+                                          photos et réglages du serveur
+
+
+=====================================================================
+INSTALLATION (une seule fois, sur l'ordinateur principal du bureau)
+=====================================================================
+
+ÉTAPE 1 — Installer Node.js (gratuit)
+  1. Ouvrez https://nodejs.org dans Edge.
+  2. Téléchargez la version « LTS » pour Windows (fichier .msi) — version 22.13
+     ou plus récente (par ex. 24.x LTS).
+  3. Double-cliquez le fichier téléchargé : Suivant, Suivant… Terminer
+     (laissez toutes les options proposées par défaut ; ne cochez pas
+     « Tools for Native Modules », inutile ici).
+  Pour vérifier : touche Windows, tapez « cmd », Entrée, puis tapez
+     node --version
+  Un numéro comme v24.x.x ou v22.13.0 (ou plus) doit s'afficher.
+
+ÉTAPE 2 — Copier le dossier TMT Gestion à un endroit fixe
+  Par exemple : C:\TMT-Gestion
+  IMPORTANT : pas dans « Téléchargements », et PAS dans un dossier OneDrive,
+  Google Drive ou Dropbox : une base de données en cours d'utilisation ne doit
+  pas être synchronisée. (Pour avoir une copie dans OneDrive, utilisez le
+  réglage « copieVers », voir SAUVEGARDES plus bas.)
+
+ÉTAPE 3 — Créer l'icône du Bureau
+  Double-cliquez sur « Installer le raccourci.vbs ».
+  -> L'icône bleue « TMT Gestion » apparaît sur le Bureau.
+  -> Une question propose de lancer le serveur automatiquement à l'ouverture de
+     Windows : répondez OUI sur l'ordinateur principal si d'autres ordinateurs
+     doivent pouvoir l'utiliser (sinon, NON suffit).
+
+ÉTAPE 4 — Premier lancement et reprise de vos données
+  1. Double-cliquez sur l'icône « TMT Gestion ».
+     - Une fenêtre noire « TMT Gestion - serveur (ne pas fermer) » s'ouvre
+       (réduite dans la barre des tâches) : c'est le serveur. Laissez-la ouverte.
+     - L'application s'ouvre dans sa propre fenêtre Edge (http://localhost:8080).
+  2. Créez VOTRE compte (celui du gérant) : votre nom, un identifiant (ex.
+     rachid) et un mot de passe (6 caractères minimum). Ce compte a tous les
+     droits. Retenez bien le mot de passe (voir MOT DE PASSE OUBLIÉ sinon).
+  3. La base est vide : cliquez « Importer mon fichier de données (.xlsx)… » et
+     choisissez votre fichier actuel, celui de la version précédente
+     (par ex. Documents\TMT-donnees.xlsx — son nom est affiché dans l'ancienne
+     version : Paramètres › Fichier de données).
+     Le fichier est seulement lu, il n'est pas modifié. L'import est vérifié
+     automatiquement (les données relues dans la base sont comptées).
+  4. Si vous aviez archivé des années (fichiers TMT-archive-2025.xlsx…),
+     l'application le signale : cliquez « Intégrer une archive… » et choisissez
+     chaque fichier d'archive. (Aussi possible plus tard : Paramètres › Base de
+     données › « Intégrer une archive annuelle… ».)
+  5. Créez les comptes des autres personnes (menu Utilisateurs, voir plus bas).
+  6. C'est tout. Gardez l'ancien fichier .xlsx et l'ancienne version quelques
+     semaines, par précaution, mais NE LES UTILISEZ PLUS pour saisir : les
+     saisies faites dans l'ancienne version n'arrivent pas dans la base.
+
+  Si Windows affiche « Windows a protégé votre ordinateur » en ouvrant le .bat
+  ou le .vbs : « Informations complémentaires » › « Exécuter quand même ».
+
+
+=====================================================================
+UTILISATION AU QUOTIDIEN
+=====================================================================
+- Double-cliquez sur l'icône « TMT Gestion ». Si le serveur tourne déjà,
+  l'application s'ouvre simplement.
+- En bas à gauche : « Enregistré 10:32 · base TMT.db ✓ » = tout est enregistré.
+- Fermer l'application = fermer la fenêtre Edge. La fenêtre noire du serveur
+  peut rester ouverte (elle se ferme avec Windows ; les données sont déjà
+  enregistrées).
+- Si la fenêtre du serveur a été fermée par erreur, un bandeau orange
+  « Serveur TMT Gestion injoignable » apparaît : vos saisies restent gardées
+  dans Edge ; relancez l'icône « TMT Gestion » et elles sont enregistrées
+  automatiquement (même si Edge a été fermé entre-temps).
+- Plus d'années à ouvrir ou à fermer : toutes les années sont dans la base.
+  Pour consulter un ancien mois, choisissez-le simplement avec le sélecteur de
+  mois (◀ ▶) de l'écran concerné.
+- Recherche rapide : Ctrl+K (ou « Rechercher… » en haut du menu), depuis
+  n'importe quel écran. Tapez une immatriculation (même sans les tirets), un
+  chauffeur, un trajet, un client, une date (12/09, 12/09/2026, hier) ou un
+  mois (09/2026, septembre). ↑ ↓ pour choisir, Entrée pour ouvrir,
+  Maj+Entrée pour ouvrir la dernière fiche où il apparaît, Échap pour fermer.
+  La recherche ne montre que ce que vos droits permettent d'ouvrir.
+
+
+=====================================================================
+OÙ SONT VOS DONNÉES
+=====================================================================
+- Dans le dossier donnees\ : TMT.db (la base) et donnees\sauvegardes\.
+- Ne copiez pas TMT.db pendant que le serveur tourne : utilisez les copies du
+  dossier sauvegardes\ (elles sont faites proprement et vérifiées).
+- Pour ouvrir les données dans Excel : Paramètres › Base de données ›
+  « Exporter une copie (Excel) » (même format qu'avant : une feuille par table).
+  Pour les rapports, les boutons Export Excel de chaque écran restent là.
+- La base TMT.db peut aussi être ouverte avec « DB Browser for SQLite »
+  (gratuit), en lecture : une table par feuille de l'ancien fichier Excel,
+  mêmes noms de colonnes.
+
+
+=====================================================================
+SAUVEGARDES AUTOMATIQUES
+=====================================================================
+- Chaque jour, le serveur copie toute la base dans donnees\sauvegardes\
+  (TMT-2026-09-24.db…), vérifie la copie, et la remet à jour toutes les 2 heures
+  s'il y a eu des modifications. Les 30 derniers jours sont gardés.
+- Une copie par mois est gardée sans limite dans sauvegardes\mensuelles\.
+- Paramètres › Sauvegardes automatiques :
+  · « Faire une copie maintenant » (avant une grosse opération, par exemple) ;
+  · « Tester la dernière copie » (une fois par mois) : la copie est ouverte et
+    comparée aux données actuelles (fiches, voyages, paiements…) ;
+  · « Restaurer… » : revient à l'état d'une copie. L'état actuel est d'abord
+    gardé dans une copie « avant restauration » (on peut donc annuler en
+    restaurant celle-ci). Les autres ordinateurs se mettent à jour tout seuls ;
+  · « Télécharger » : pour emporter une copie (clé USB, e-mail).
+- COPIE HORS DE L'ORDINATEUR (conseillé) : pour qu'une copie parte aussi dans
+  OneDrive, sur une clé USB ou un disque réseau : Paramètres › Serveur et
+  accès réseau › « Copie supplémentaire des sauvegardes » (ex.
+  C:\Users\Bureau\OneDrive\TMT-copies), puis Enregistrer.
+  Si la copie échoue (clé débranchée…), un bandeau le signale.
+
+
+=====================================================================
+PLUSIEURS ORDINATEURS DU BUREAU — facultatif
+=====================================================================
+Le serveur tourne sur l'ordinateur principal ; les autres ordinateurs connectés
+au même réseau (câble ou Wi-Fi du bureau) ouvrent l'application avec Edge ou
+Chrome, sans rien installer.
+
+Sur l'ordinateur principal :
+  1. Paramètres › Serveur et accès réseau : cochez « Accès depuis les autres
+     ordinateurs et les téléphones », puis Enregistrer. (Chaque personne se
+     connecte avec son compte. Le « Mot de passe réseau » ajoute, si vous le
+     voulez, un mot de passe commun demandé avant l'écran de connexion.)
+  2. Fermez la fenêtre noire du serveur, puis relancez l'icône TMT Gestion.
+  3. Windows demande l'autorisation pour « Node.js » : cochez « Réseaux
+     privés » et cliquez « Autoriser ».
+  4. L'adresse à utiliser est affichée dans Paramètres › Base de données
+     (par ex. http://192.168.1.20:8080) et dans la fenêtre du serveur.
+     Conseil : demandez à votre fournisseur Internet / informaticien de réserver
+     cette adresse pour l'ordinateur principal (sinon elle peut changer) — ou
+     utilisez le nom de l'ordinateur : http://NOM-DU-PC:8080
+  5. Laissez le serveur démarrer avec Windows (étape 3 de l'installation).
+
+Sur les autres ordinateurs :
+  - Ouvrez l'adresse (ex. http://192.168.1.20:8080), connectez-vous avec votre
+    compte, et ajoutez-la aux favoris.
+
+Comment ça marche à plusieurs :
+  - Chaque modification est envoyée ligne par ligne ; les autres postes la
+    voient en quelques secondes, sans recharger la page.
+  - Deux personnes peuvent pointer la même fiche en même temps sur des lignes
+    différentes : rien n'est perdu.
+  - Si la MÊME ligne est modifiée au même moment sur deux postes, c'est la
+    dernière modification qui est gardée (le journal indique qui a fait quoi).
+  - Pendant qu'une fenêtre de saisie est ouverte, l'affichage n'est pas
+    remplacé : les modifications des autres arrivent à sa fermeture.
+  - L'ordinateur principal doit rester allumé, serveur lancé.
+
+
+=====================================================================
+ACCÈS DEPUIS L'EXTÉRIEUR (TÉLÉPHONE, DOMICILE) AVEC TAILSCALE
+=====================================================================
+Tailscale crée un réseau privé entre vos appareils : le téléphone rejoint
+l'ordinateur du bureau depuis n'importe où (4G, maison…), sans ouvrir la
+box internet. Seuls les appareils connectés à VOTRE compte Tailscale
+peuvent atteindre l'application.
+
+Une seule fois, sur l'ordinateur principal :
+ 1. Paramètres › Serveur et accès réseau : cocher « Accès depuis les autres
+    ordinateurs et les téléphones », Enregistrer, puis fermer la fenêtre noire
+    du serveur et relancer TMT Gestion.
+    Si Windows demande l'autorisation pour Node.js : Autoriser, en cochant
+    « Privé » ET « Public ».
+ 2. Installer Tailscale (tailscale.com), se connecter (ex. compte Google).
+ 3. Paramètres Windows › Système › Alimentation : mise en veille « Jamais »
+    (l'ordinateur doit rester allumé, serveur lancé).
+
+Sur chaque téléphone (ou ordinateur à la maison) :
+ 4. Installer l'application Tailscale, se connecter avec LE MÊME compte,
+    activer le bouton.
+ 5. Dans Chrome / Safari : http://100.x.x.x:8080 (l'adresse 100.… de
+    l'ordinateur du bureau : icône Tailscale près de l'horloge, ou
+    Paramètres › Base de données de TMT Gestion, qui liste les adresses).
+ 6. Se connecter avec son compte TMT Gestion. Menu du navigateur ›
+    « Ajouter à l'écran d'accueil » pour l'ouvrir comme une application.
+
+Sur téléphone, l'application s'adapte à l'écran : bouton ☰ en haut à
+gauche pour le menu, listes affichées en cartes. Pointage : une ligne
+compacte par trajet, cases Aller / Retour alignées à droite (titres
+toujours visibles) ; ✎ ouvre la ligne pour changer trajet, véhicule,
+chauffeur, gasoil, remarque ou la supprimer.
+Bouton « Retour » du téléphone : revient à l'écran précédent de
+l'application (ferme d'abord une fenêtre, le menu ou la recherche). Rapports et factures (format A4) : faire glisser
+de côté, ou tourner le téléphone.
+
+Si la page ne s'ouvre pas : Tailscale activé sur le téléphone ? ordinateur
+du bureau allumé, serveur lancé ? Sinon, pare-feu : ouvrir « Invite de
+commandes » en administrateur sur l'ordinateur du bureau et taper :
+  netsh advfirewall firewall add rule name="TMT Gestion" dir=in action=allow protocol=TCP localport=8080
+Pour retirer l'accès d'un téléphone : le supprimer dans la console
+Tailscale (login.tailscale.com), et/ou désactiver son compte TMT Gestion.
+N'ouvrez PAS de port sur la box internet : l'application n'est pas prévue
+pour être exposée directement sur internet.
+
+
+=====================================================================
+COMPTES UTILISATEURS ET DROITS
+=====================================================================
+- Chaque personne se connecte avec SON identifiant et SON mot de passe, sur
+  tous les ordinateurs (y compris l'ordinateur principal). La connexion reste
+  ouverte sur cet ordinateur jusqu'à « Déconnexion » (en bas à gauche), ou
+  après 12 heures sans utilisation.
+- Menu « Utilisateurs » (réservé aux comptes qui ont le droit « Gérer les
+  utilisateurs ») : « + Nouvel utilisateur », puis cochez ce qu'il peut faire :
+    Saisie : Pointage du jour · Gasoil · Réparations et entretien ·
+             Référentiels (véhicules, chauffeurs, trajets, planning…)
+    Argent : Voir les prix et montants, et seulement alors : Tableau de bord ·
+             Rapports, facture et paiements · Caisse
+    Administration : Paramètres et sauvegardes · Gérer les utilisateurs
+  Préréglages en un clic : « Saisie des fiches » (pointage + gasoil),
+  « Bureau », « Comptable », « Tous ».
+- SANS « Voir les prix et montants », les tarifs, totaux, salaires, loyers,
+  factures et paiements ne sont même pas envoyés à son ordinateur : ils ne
+  peuvent pas être vus, même en fouillant. Une fiche qu'il crée reçoit quand
+  même les bons tarifs (ceux des trajets).
+- Ce qui n'est pas autorisé est aussi refusé par le serveur (pas seulement caché).
+- Toutes les modifications sont notées dans le journal avec le nom de la
+  personne (Paramètres › Journal des modifications).
+- Changer ses droits ou désactiver un compte prend effet tout de suite sur
+  son ordinateur. Pour bloquer quelqu'un sans supprimer son compte : décochez
+  « Compte actif ».
+- Chacun peut changer son mot de passe : « Mon mot de passe » en bas à gauche.
+  Mot de passe oublié par un employé : le gérant lui en donne un nouveau
+  (Utilisateurs › Modifier… › Nouveau mot de passe).
+- Après 5 mauvais mots de passe, les essais sont bloqués quelques minutes.
+
+
+=====================================================================
+PARTAGER LE RELEVÉ D'UN SOUS-TRAITANT PAR LIEN
+=====================================================================
+- Rapports › Sous-traitants, ouvrez le relevé du mois d'un prestataire, puis
+  cliquez « 🔗 Partager ». Choisissez la durée de validité (1 heure, 24 heures,
+  3 jours, 7 jours ou 30 jours) puis « Générer le lien » ; copiez-le et
+  envoyez-le au sous-traitant (WhatsApp, e-mail…).
+- Ce lien ouvre une page publique qui affiche uniquement CE relevé (celui du
+  mois choisi), exactement comme dans l'application, avec un bouton
+  Imprimer / PDF. Aucune connexion, aucun compte, aucun mot de passe : le
+  sous-traitant n'a rien à saisir.
+- Si vous recliquez « 🔗 Partager » alors qu'un lien est déjà en cours pour ce
+  relevé, il est réaffiché tel quel (avec sa date d'expiration) plutôt que
+  d'en créer un nouveau. Deux actions possibles : « 🔄 Renouveler » (choisissez
+  une nouvelle durée : l'ancien lien cesse aussitôt de fonctionner et un
+  nouveau est généré) ou « ✕ Expirer maintenant » (coupe l'accès tout de
+  suite, sans en générer un autre).
+- Passé le délai choisi, le lien affiche « Lien expiré » ; régénérez-en un
+  nouveau depuis le même bouton « 🔗 Partager » si besoin.
+- Le lien ne donne accès à rien d'autre : ni aux autres sous-traitants, ni
+  aux employés, salaires, clients ou à la caisse — uniquement au document
+  figé au moment du partage.
+
+
+=====================================================================
+MOT DE PASSE OUBLIÉ (compte du gérant)
+=====================================================================
+Sur l'ordinateur principal, double-cliquez sur « Mot de passe oublie.bat » :
+la liste des comptes s'affiche ; tapez l'identifiant, puis deux fois le
+nouveau mot de passe. (Le serveur peut rester lancé.) Si le compte était
+désactivé, il est réactivé.
+
+
+=====================================================================
+PROBLÈMES FRÉQUENTS
+=====================================================================
+« Node.js n'est pas installé » : faites l'étape 1, puis relancez l'icône.
+  (Si Node.js vient d'être installé, redémarrez l'ordinateur une fois.)
+« Node.js … est trop ancien » : installez la version LTS actuelle (étape 1).
+« Le port 8080 est déjà utilisé par un autre programme » : Paramètres ›
+  Serveur et accès réseau › Port (ex. 8081), puis relancez et utilisez
+  http://localhost:8081
+« Impossible d'ouvrir la base de données / serveur injoignable » : le serveur
+  n'est pas lancé — double-cliquez sur l'icône TMT Gestion. Sur un autre
+  ordinateur : vérifiez que l'ordinateur principal est allumé et son serveur
+  lancé, et que l'adresse est la bonne.
+Réglages du serveur : ils sont dans donnees\reglages-serveur.json et se
+  modifient dans Paramètres › Serveur et accès réseau (plus besoin de
+  config.json ; un ancien config.json est repris automatiquement au 1er
+  lancement, vous pouvez ensuite le supprimer).
+L'icône ouvre une fenêtre noire qui se ferme aussitôt : lancez
+  « Lancer TMT Gestion.bat » directement pour lire le message.
+Journal du serveur : donnees\journal-serveur.log
+
+
+
+=====================================================================
+CHANGER D'ORDINATEUR PRINCIPAL / METTRE À JOUR
+=====================================================================
+- Nouvel ordinateur : installez Node.js (étape 1), fermez la fenêtre du
+  serveur sur l'ancien ordinateur, puis copiez TOUT le dossier TMT Gestion
+  (avec donnees\) sur le nouveau, et faites l'étape 3.
+  Autre méthode : copiez la dernière sauvegarde (donnees\sauvegardes\
+  TMT-AAAA-MM-JJ.db) dans le dossier donnees\ du nouvel ordinateur en la
+  renommant TMT.db.
+- Mise à jour de l'application : fermez la fenêtre du serveur, remplacez
+  seulement le dossier serveur\ (ne touchez pas à donnees\),
+  puis relancez l'icône.
+
+
+=====================================================================
+CE QUI A DISPARU (devenu inutile avec la base de données)
+=====================================================================
+- Le fichier de données .xlsx lié et l'autorisation Edge à chaque démarrage.
+- Le verrou « fichier ouvert sur un autre ordinateur » : plusieurs postes
+  peuvent maintenant travailler ensemble.
+- Les copies datées hebdomadaires dans un dossier : remplacées par les copies
+  quotidiennes du serveur (+ « copieVers »).
+- Les archives annuelles et le sélecteur « Année » : plus d'années à ouvrir
+  ni à fermer, toutes les années restent dans la base. Les anciennes archives
+  s'intègrent une fois pour toutes (étape 4 de l'installation).
+- Le mode Saisie du dispatcher (mot de passe, écran réduit) et la saisie sur
+  téléphone par Google : retirés. Les anciens réglages (codes, adresse Google,
+  mot de passe) sont effacés de la base automatiquement.
+
+
+=====================================================================
+RAPPEL DES FONCTIONS (inchangées)
+=====================================================================
+UTILISATION
+- Pointage du jour : choisissez la date, créez la fiche depuis le planning,
+  cochez Aller / Retour. Tout est calculé et enregistré automatiquement.
+  « Confirmer la fiche » retire les trajets non effectués (comme la macro Excel).
+- Rapports & facture : chauffeurs, fermes, stations, sites x tarifs,
+  récap voyages, rentabilité, facture (Imprimer / PDF), fin de mois, relevés
+  des sous-traitants, salaires. Export Excel.
+- Gasoil, Réparations, Caisse : saisie des bons, dépenses et mouvements.
+- Référentiels : véhicules, chauffeurs, trajets (distance, tarif), clients,
+  planning type, indisponibilités.
+
+PDF
+- Les boutons « Imprimer / PDF » donnent automatiquement le bon nom au fichier
+  (ex. « Facture 09-2026 - STE MARAISSA - Septembre 2026 »).
+- Dans la fenêtre d'impression, choisissez « Enregistrer au format PDF ».
+
+IMPORTER DES BONS GASOIL DEPUIS EXCEL
+- Écran Gasoil › « Importer (Excel) » : choisissez le classeur des bons
+  (.xlsx). Colonnes reconnues, dans n'importe quel ordre : BON N°, DATE,
+  ODOMETRE, LITRES, COÛT, CHAUFFEUR, IMMATRICULATION (PRESTATAIRE est ignoré :
+  il vient du véhicule). « 38143 KM », « 32,98 L », « 500,00 DH » sont compris.
+- Un aperçu s'affiche avant d'importer : nombre de bons, total, et ce qui est
+  ignoré. Un bon dont le N° existe déjà n'est jamais importé deux fois : vous
+  pouvez réimporter le même fichier sans risque (par ex. après avoir ajouté
+  un véhicule manquant).
+- Immatriculation inconnue : le bon est importé « à compléter » (voir plus
+  bas). Choisissez le véhicule avec « Modifier », ou ajoutez-le dans
+  Référentiels › Véhicules puis cliquez « Relier » sur l'écran Gasoil.
+- Chauffeur : nom exact, sinon un nom court (« QADI » → « AHMED LQADI ») s'il
+  n'y a qu'un chauffeur possible, sinon le chauffeur pointé ce jour-là sur ce
+  véhicule. Sinon le bon est importé sans chauffeur.
+- Enregistrez le fichier au format .xlsx (pas .xls) ; convertissez-le dans
+  Excel avec « Enregistrer sous » si besoin.
+
+PAGE « CONTRÔLES » (menu, après Pointage du jour)
+- Tout ce qui est à vérifier pour le mois choisi, au même endroit : jours
+  sans fiche, trajets non cochés, jours de repos à vérifier, problèmes sur
+  les fiches (chauffeur ou véhicule manquant, doublon…), bons gasoil
+  suspects et à compléter, kilomètres qui ne collent pas, documents qui
+  expirent, entretiens à faire.
+- En haut : le total et une pastille par rubrique (✓ vert = rien à signaler).
+- « Ouvrir → » mène directement au jour, au bon ou au véhicule à corriger.
+- Chacun ne voit que les rubriques de ses droits.
+
+CHAUFFEUR EN CONGÉ / VÉHICULE AU GARAGE
+- Le jour d'une indisponibilité (Référentiels › Indisponibilités), le
+  chauffeur ou le véhicule reste visible dans les listes de la fiche mais
+  grisé, avec la raison (« Congé payé jusqu'au 28/09 ») : impossible de le
+  choisir par erreur.
+- En créant la fiche depuis le planning : message « … absent ce jour —
+  choisissez un remplaçant », lignes concernées en rouge, encadré
+  « Remplacer par… » en haut (seulement des remplaçants libres ce jour-là).
+- À l'avance : note au planning type (« 🏖 Congé payé du … au … — à
+  remplacer sur les fiches »), alerte du tableau de bord pour aujourd'hui et
+  demain, rubrique Contrôles « Absences et garage des 7 prochains jours ».
+
+VÉHICULE ENREGISTRÉ DEUX FOIS
+- Si une immatriculation existe deux fois dans Référentiels › Véhicules,
+  son historique est coupé en deux (un bon sans km, deux « réservoir »…).
+  Un encadré rouge le signale (Gasoil, Référentiels, Contrôles) avec
+  « Fusionner en un seul véhicule » : bons, pointage, réparations, planning,
+  indisponibilités et loyers passent sur une seule fiche (noté au journal).
+- Créer ou renommer un véhicule avec une immatriculation qui existe déjà
+  est refusé (espaces et minuscules compris).
+
+NOUVEAU BON GASOIL : CHAUFFEUR PROPOSÉ
+- En choisissant le véhicule, le chauffeur se remplit tout seul : celui
+  pointé sur ce véhicule le jour du bon, sinon le dernier qui l'a conduit.
+  La raison est affichée (« Proposé : … »). Un chauffeur absent ce jour-là
+  n'est pas proposé ; un choix fait à la main n'est jamais remplacé.
+
+FICHE SOUS-TRAITANT
+- « fiche → » à côté du nom (Rapports › Sous-traitants, Référentiels ›
+  Sociétés), ou cliquer son nom dans une fiche véhicule.
+- En haut : RIB, ICE, téléphone, commission et TVA, véhicules et chauffeurs.
+  Boutons : son relevé du mois, ses bons gasoil, ses coordonnées.
+- Chiffres du mois, 12 derniers mois (voyages, brut, retenues, net,
+  paiement : payé le … / à payer le … / en retard de N j), ses véhicules
+  (km, L/100, bons suspects, garage, documents) et ses chauffeurs.
+- Réservée aux comptes avec le droit « Rapports ».
+
+PRIX AU LITRE ANORMAL (bons gasoil)
+- Prix habituel = médiane du prix au litre des bons du mois. Un bon qui
+  s'en écarte de plus de 8 % (réglable dans l'encadré rouge de l'écran
+  Gasoil) devient « suspect » : litres ou montant à vérifier. « Vu ✓ » si
+  le bon est normal.
+
+FICHE VÉHICULE
+- Cliquer une immatriculation (écran Gasoil, fiche d'un chauffeur) ou
+  « fiche → » dans Référentiels › Véhicules.
+- En haut : statut, marque, places, propriétaire / loueur, compteur estimé,
+  documents (vert = à jour, orange = bientôt, rouge = expiré) et entretiens
+  à faire.
+- Chiffres du mois (km, gasoil, réparations, jours au garage, bons
+  suspects), les 12 derniers mois (cliquer un mois pour le détail), les
+  chauffeurs qui l'ont conduit avec leur consommation comparée à celle du
+  véhicule, ses bons gasoil, réparations et indisponibilités.
+- Sans le droit « Voir les prix et montants » : mêmes informations, sans
+  aucun montant.
+
+DÉPART D'UN CHAUFFEUR (date de démission)
+- Référentiels › Chauffeurs › colonne « Départ » : la date où il quitte
+  l'entreprise (« parti le … » en rouge, « part le … » en orange avant).
+- À partir de cette date, il n'est plus proposé dans les fiches (avant,
+  si). Sur une fiche après son départ, ses lignes sont signalées en rouge en
+  haut avec « Remplacer par… » (chauffeurs libres ce jour-là).
+- Planning type : encadré rouge + « Remplacer par… » sous son nom
+  (d'abord les chauffeurs « libres », pas encore au planning ; ★ = même
+  employeur). Un chauffeur parti ou qui part n'est jamais proposé.
+- Contrôles : rubrique « Chauffeurs partis encore affectés ». Tableau de
+  bord : alerte si le planning a encore un chauffeur parti ou qui part dans
+  les 7 jours. Les anciennes fiches et le salaire ne changent pas.
+
+SUIVI DES CHAUFFEURS (Rapports › Suivi chauffeurs)
+- Une note sur 100 par chauffeur, les plus basses en premier :
+  −5 par jour d'absence non payée (congé payé et maladie ne comptent pas),
+  −3 par trajet non coché, −5 par bon gasoil suspect non vérifié, et
+  jusqu'à −20 si sa consommation dépasse de plus de 10 % la moyenne du MÊME
+  véhicule (comparaison juste : même bus, autre chauffeur).
+- Cliquer un nom : sa fiche (absences, trajets non cochés, bons suspects,
+  avances, consommation par véhicule conduit comparée à la moyenne du
+  véhicule sur 12 mois). Export Excel avec les autres rapports.
+
+BONS GASOIL SUSPECTS
+- L'écran Gasoil signale en rouge (« ⚠ suspect », avec la raison) :
+  même N° de bon utilisé deux fois ; deux bons le même jour pour un même
+  véhicule ; bon d'un véhicule qui n'a aucun trajet pointé ce jour-là (fiche
+  du jour déjà faite) ; véhicule indisponible ce jour-là (garage…) ;
+  kilométrage inférieur au bon précédent.
+- Un encadré rouge donne le nombre par mois, avec « Afficher seulement les
+  bons suspects ». Une alerte apparaît aussi au tableau de bord.
+- Après vérification, « Vu ✓ » marque le bon comme normal (noté au journal ;
+  « annuler » pour revenir en arrière).
+
+TOUS LES RELEVÉS SOUS-TRAITANTS EN UN PDF
+- Rapports › Sous-traitants & locations › « 🖨 Tous les relevés (PDF) » :
+  tous les relevés du mois à la suite, chacun commençant sur une nouvelle
+  page, puis « Imprimer / PDF » › « Enregistrer au format PDF » : un seul
+  fichier « Relevés sous-traitants - Septembre 2026 ».
+
+FILTRER LES BONS GASOIL
+- En haut de l'écran Gasoil : Prestataire, Véhicule, Chauffeur, et période
+  « Du … au … » (par défaut le mois choisi ; la période peut couvrir
+  plusieurs mois). La liste des bons, les totaux, la consommation par
+  véhicule et le contrôle km suivent les filtres.
+- Choisir un prestataire limite la liste des véhicules aux siens.
+- « Exporter (Excel) » exporte ce qui est filtré : feuille « Consommation »
+  et feuille « Bons » (détail), avec la période et le filtre dans le titre.
+- Changer de mois avec ◀ ▶ remet la période sur ce mois (les autres filtres
+  restent). « Effacer les filtres » remet tout.
+
+CONSOMMATION DE GASOIL (L / 100 KM)
+- Réglage « Remplissage » à côté du tableau « Consommation gasoil par
+  véhicule » : « montant fixe » (par défaut) ou « plein à plein ».
+- Montant fixe (bons de 500 DH…) : le gasoil d'un bon est consommé APRÈS ce
+  bon, jusqu'au bon suivant. Chaque trajet entre deux bons compte une seule
+  fois, dans le mois où il se termine. Exemple septembre : km depuis le
+  dernier bon d'août jusqu'au dernier bon de septembre ; litres = ceux du
+  dernier bon d'août et des bons de septembre, SAUF le dernier bon de
+  septembre (encore dans le réservoir : colonne « Dernier bon (réservoir,
+  L) », étiquette « réservoir » dans la liste). Aucun km n'est perdu : les
+  12 mois additionnés donnent les vrais km du véhicule.
+  Par bon : litres du bon précédent ÷ km depuis ce bon.
+  Un bon sans kilométrage compte quand même dans les litres.
+- Plein à plein : chaque plein remplace le gasoil consommé depuis le bon
+  précédent (le premier bon d'un véhicule n'est pas compté).
+- « Coût payé » compte toujours tous les bons (l'argent est dépensé) ; la
+  retenue sur les sous-traitants ne change pas.
+
+BONS GASOIL À COMPLÉTER ET SÉLECTION MULTIPLE
+- Un bon sans véhicule, chauffeur, N° de bon, kilométrage, litres ou coût est
+  « à compléter » : ligne sur fond orange, case manquante en orange (ex.
+  « 55765-B-33 ? » = immatriculation du fichier, inconnue).
+- En haut de l'écran Gasoil, un encadré donne le nombre de bons à compléter
+  par mois, avec « Afficher seulement les bons à compléter ». Après un import,
+  ce filtre s'active tout seul. « Modifier » rappelle ce qu'il y avait dans
+  le fichier.
+- Changer le chauffeur de plusieurs bons en une fois : cochez les bons (case
+  à gauche ; la case d'en-tête coche tout le mois ou tous les bons à
+  compléter), choisissez le chauffeur dans la barre bleue, « Appliquer ».
+
+ALERTES DU TABLEAU DE BORD
+- Tableau de bord › bouton « 🔔 Alertes » : cochez ce que vous voulez voir
+  (fiches du jour, documents, entretien, factures, sous-traitants, salaires,
+  gasoil, kilomètres, clôture, sauvegardes…). Cela vaut pour « Ce matin », la
+  liste des alertes et la pastille rouge du menu.
+- Chaque compte a son propre choix, gardé sur tous les ordinateurs. Le bouton
+  indique combien de catégories sont masquées.
+
+SOUS-TRAITANTS : GASOIL DU MOIS SUIVANT ET ÉCHÉANCE À 45 JOURS
+- Un relevé est payé 45 jours après la fin du mois (août → 15/10/2026,
+  juillet → 14/09/2026). L'échéance est écrite sur le relevé (« À payer le »)
+  et dans la liste des sous-traitants (« Dans 21 j », « En retard de 3 j »).
+- Le gasoil retenu est celui du mois SUIVANT : le relevé d'août retient le
+  gasoil de septembre, celui de juillet le gasoil d'août. Les relevés jusqu'à
+  juin 2026 gardent le gasoil de leur propre mois.
+- Tant que le mois du gasoil n'est pas clôturé, le relevé indique « montant
+  provisoire ». Clôturer septembre fige le gasoil de septembre (donc le
+  relevé d'août).
+- Alertes : relevés à payer dans les 7 jours, et relevés en retard.
+- Sur le relevé, le gasoil tient en une ligne (« Gasoil fourni — septembre
+  2026 : 12 bon(s), 400 L ») ; le détail des bons est imprimé seul en
+  dernière page (et dans une feuille « Gasoil » de l'export Excel).
+- Réglages : Paramètres › Commission sur les sous-traitants (« Gasoil retenu
+  sur le relevé : du mois suivant, à partir du relevé de … », délai en jours).
+
+ENTRETIEN DES VÉHICULES (par kilométrage)
+- Réparations › onglet « Entretien » : pour chaque véhicule en Propriété ou en
+  Location, prochaine vidange, filtres, plaquettes, courroie… « dans 800 km »,
+  « dépassé de 300 km » ou « avant le 15/11/2026 ».
+- Compteur actuel ≈ dernier kilométrage relevé (bons gasoil ou entretiens) + km
+  des trajets pointés depuis.
+- Cliquez une case pour enregistrer l'entretien fait (il s'ajoute aux réparations
+  avec son coût). Le plan d'entretien (tous les X km / N mois) est modifiable.
+- Les entretiens à faire apparaissent dans « Ce matin » et les alertes.
+- Seuil de l'alerte réglable, en km ET en jours (« Alerte à moins de … km ou …
+  jours »), directement au-dessus du tableau — comme le seuil « jours avant
+  expiration » des documents (assurance, visite technique…) dans Paramètres.
+
+VÉHICULES INDISPONIBLES ET ABSENCES DES CHAUFFEURS
+- Référentiels › « Indisponibilités » : véhicule au garage, en panne… ;
+  chauffeur en congé, malade, absent (du … au …).
+- Dans la fiche du jour, les trajets concernés sont signalés en rouge en haut,
+  avec une liste de véhicules / chauffeurs libres ce jour-là pour les remplacer
+  (★ = même prestataire ou même employeur).
+- Salaires : congé payé et maladie sont payés ; « absence non payée » retire
+  1/26 du salaire mensuel par jour (dimanches non comptés). Salaire journalier :
+  les jours de congé payé et de maladie sont payés. Détail dans Rapports ›
+  Salaires et dans le relevé du chauffeur.
+
+CONTRÔLE KM (Gasoil, en bas de page)
+- Pour chaque bon gasoil, les km du compteur depuis le bon précédent du même
+  véhicule sont comparés aux km des trajets pointés entre les deux dates.
+- « à vérifier » : km non expliqués (usage hors service, trajet non pointé,
+  erreur de compteur) ou trajets pointés supérieurs au compteur.
+- Tolérance réglable (par défaut 15 % et 40 km, pour les trajets vers le dépôt).
+
+CAISSE (menu Caisse)
+- Entrées (alimentation, remboursement…) et sorties en espèces (péage, parking,
+  lavage, avance chauffeur, réparation…), solde courant par jour et par mois.
+- « Avance chauffeur » : déduite automatiquement du salaire du mois choisi.
+- « Réparation véhicule » : ajoutée aussi aux Réparations (comptée une fois).
+- Les autres frais apparaissent dans Rapports › Résultat du mois. Export Excel.
+
+ENCAISSEMENTS CLIENTS (Rapports › Encaissements clients)
+- Tout ce qui reste à encaisser, tous mois confondus : non envoyée, pas encore
+  échue, retard 1–30 j, 31–60 j, plus de 60 j. Saisie des paiements sur place.
+- Historique des factures soldées sur 12 mois avec le délai de paiement.
+
+RÉPARATIONS : QUI PAIE ?
+- Chaque réparation a un champ « Payée par » :
+  · Notre société : comptée dans nos charges (résultat, rentabilité du véhicule) ;
+  · Propriétaire du véhicule : payée par le prestataire ou le loueur, PAS une
+    charge pour nous (gardée pour l'historique et l'entretien) ;
+  · Avancée — retenue au prestataire : nous payons, puis le montant est retenu
+    automatiquement sur le relevé du sous-traitant du mois choisi.
+- Par défaut : « Notre société » pour nos véhicules, « Propriétaire » pour les
+  véhicules sous-traitants ou loués.
+
+RENTABILITÉ PAR TRAJET (Rapports › Rentabilité par trajet)
+- Pour chaque trajet : chiffre d'affaires HT, coût (sous-traitance, nos véhicules,
+  nos chauffeurs), marge en DH et en %, marge par voyage. Du plus faible au plus
+  fort, sur 1, 3, 6 ou 12 mois. Trajets à perte en rouge, sous la marge minimale
+  souhaitée en orange.
+- Sous-traitance : ce que nous payons au sous-traitant (hors TVA).
+  Nos véhicules : gasoil, charges fixes, loyer et réparations à notre charge,
+  répartis entre les trajets du véhicule selon les km.
+  Nos chauffeurs : salaire brut réparti selon les km.
+- « coûts ? » : trajet fait avec notre véhicule sans aucun coût saisi → marge
+  surestimée.
+
+CALCULATEUR DE PRIX (Rapports › Calculateur de prix)
+- Avec notre véhicule : distance, voyages par jour, jours par mois → coût mensuel
+  (gasoil et entretien au km, chauffeur, charges du véhicule, calculés à partir
+  de vos données, modifiables), prix minimum sans perte et prix conseillé avec
+  la marge souhaitée.
+- En sous-traitance : prix du sous-traitant → prix client et notre marge.
+- Comparaison avec le prix au km de vos trajets actuels de distance proche.
+
+IMPORTER VOS ANCIENS MOIS (classeurs Excel « Fiche MM-AAAA »)
+- Paramètres › « Importer d'anciens classeurs Excel » : sélectionnez un ou
+  plusieurs classeurs d'un coup (ou glissez-les sur la fenêtre de l'application).
+- Chaque feuille nommée JJ-MM-AAAA devient une fiche du jour. Un aperçu indique le
+  nombre de jours par mois avant l'import. Les jours déjà présents sont ignorés
+  (ou remplacés si vous cochez la case). Les mois clôturés ne sont jamais modifiés.
+
+CE QUI A CHANGÉ (Tableau de bord)
+- Sous « Ce matin » : le mois comparé au mois précédent, à date égale si le mois
+  est en cours (ex. 1er–24 septembre contre 1er–24 août), expliqué en phrases :
+  chiffre d'affaires / voyages et trajets responsables, gasoil comparé aux km et
+  véhicules responsables, réparations, bons gasoil suspects par sous-traitant,
+  jours d'absence des chauffeurs.
+- Peut être masqué : bouton « Alertes » du tableau de bord › « Ce qui a changé ».
+
+RISQUE DE PANNE (consommation en hausse)
+- Un véhicule dont les L/100 km montent 3 mois de suite (ou restent nettement
+  au-dessus de son habitude) est signalé : alerte en tête du tableau de bord,
+  carte rouge avec graphique des 6 mois dans sa fiche, section dans Contrôles.
+  À faire vérifier : injecteurs, filtres, pneus, freins qui frottent.
+
+REMPLACER UN CHAUFFEUR SUR TOUS SES TRAJETS D'UN COUP
+- Fiche du jour : chauffeur absent / parti (ou véhicule indisponible) sur 2
+  trajets ou plus → « Remplacer sur les N trajets par… » : un seul choix.
+- Planning type : chauffeur parti ou qui part sur plusieurs lignes → un seul
+  choix pour toutes ses lignes, et pour les fiches déjà créées à partir de sa
+  date de départ (les jours d'avant et les mois clôturés ne changent pas).
+
+BON GASOIL RAPIDE (téléphone)
+- Tableau de bord (téléphone) › « ⛽ Bon gasoil rapide », ou page Gasoil › « ⛽ Rapide » :
+  1. véhicule en une touche (derniers utilisés d'abord, recherche par chiffres),
+     chauffeur proposé automatiquement ;
+  2. photo du bon avec l'appareil photo (réduite à ~150 Ko) ;
+  3. litres, montant, compteur, N° du bon : contrôles immédiats (prix au litre
+     anormal, compteur plus bas, bon déjà saisi, deux bons le même jour).
+- Les photos sont rangées dans donnees\photos (à garder avec le dossier donnees).
+  Si une copie supplémentaire est réglée (Paramètres › Serveur), les nouvelles
+  photos y sont copiées aussi.
+- Liste Gasoil : bouton 📷 pour voir la photo d'un bon. « Modifier le bon » :
+  ajouter ou remplacer la photo d'un ancien bon.
+- Seuls les comptes avec le droit « Gasoil » voient les photos.
+- Sur téléphone, la liste des bons est compacte : date, N°, véhicule, chauffeur,
+  puis compteur / km parcourus / litres / DH / L/100 sur une seule ligne.
+- « Trier les bons » : plus anciens ou plus récents d'abord (choix gardé sur
+  chaque ordinateur / téléphone).
+
+
+CHANGER UN TRAJET DU … AU … (autre chauffeur et/ou autre véhicule)
+- Référentiels › Planning type › « + Changer un trajet du … au … », ou bouton
+  « 📅 Changer du … au … » de la fiche du jour.
+- Choisir la ligne du planning, les dates (fin vide = jusqu'à nouvel ordre), le
+  nouveau chauffeur et/ou véhicule, le motif. Un aperçu indique les fiches
+  modifiées et les conflits (absent, déjà sur un autre trajet…).
+- Les fiches déjà créées dans la période sont modifiées (sauf mois clôturés), les
+  suivantes aussi ; après la date de fin, le planning type reprend.
+- Supprimer un changement remet les fiches de la période comme au planning.
+- Planning type : seuls les changements en cours ou à venir sont affichés ;
+  « Voir les changements terminés » pour revoir les anciens.
+
+RÉCAP VOYAGES : FILTRES ET TRI (Rapports › Récap voyages)
+- Filtrer par sous-traitant, véhicule, chauffeur, trajet ou recherche libre ;
+  le total est recalculé sur les lignes filtrées.
+- Trier : clic sur le titre d'une colonne (▲ puis ▼), ou « Trier par ».
+- « Exporter cet onglet (Excel) » exporte les lignes filtrées ; « Exporter tout
+  le mois » n'est pas filtré.
+- « 📷 Exporter en image » télécharge un PNG du tableau tel qu'affiché à
+  l'écran (mêmes couleurs, colonnes complètes) — pratique pour partager ou
+  imprimer un aperçu sans ouvrir Excel.
+- Planning type : les lignes des trajets inactifs sont masquées (lien « Les
+  afficher » pour les revoir, grisées) ; pas d'alerte ni de fiche pour elles.
+
+BOUTON « ANNULER » (10 secondes)
+- Après une suppression ou un enregistrement (bon gasoil, ligne ou fiche du jour,
+  changement du … au …, absence, paiement, réparation, remplacement de chauffeur,
+  fusion de véhicules…), une barre « ↶ Annuler » apparaît 10 secondes : un clic
+  remet tout comme avant (noté dans le journal).
+
+RECHERCHE DANS LES TABLEAUX
+- Au-dessus de chaque tableau de 6 lignes ou plus (Rapports, Gasoil,
+  Réparations, Caisse…) : « 🔎 Rechercher dans ce tableau… ». Filtre immédiat ;
+  la ligne de total est masquée pendant la recherche.
+
+SALAIRES : PÉRIODE DE PAIEMENT, PAIEMENT GROUPÉ, PRORATA
+- Les salaires d'un mois se paient du 15 au 20 du mois suivant (réglable en haut
+  de Rapports › Salaires). Alerte 3 jours avant, en rouge après la période.
+- Cocher plusieurs chauffeurs (ou la case du titre) → « Payer les salaires
+  cochés… » : une date, un mode, une référence pour tous.
+- Salaire mensuel au prorata : salaire × (jours travaillés + congés payés + jours
+  fériés non travaillés) ÷ 26, plafonné au salaire. Choix « fixe » possible en
+  haut de l'onglet. Les jours fériés comptent comme des jours payés (comme un
+  dimanche) : un chauffeur présent tous ses jours de travail touche son salaire
+  plein même le mois où il y a plusieurs jours fériés (ex. août). Un mois qui ne
+  contient aucune donnée pour un chauffeur (avant le début de sa saisie dans
+  l'application, par exemple) affiche bien 0 jour payé, jamais un ou deux jours
+  au hasard selon les fériés du mois.
+
+DATES
+- Toutes les dates s'affichent en jj/mm/aaaa (mois en mm/aaaa), même si le
+  téléphone ou le navigateur est en anglais.
+
+BULLETINS DE PAIE (Rapports › Bulletins de paie)
+- Employeur (adresse, ICE, IF, RC, patente, N° CNSS, taux accident du travail) :
+  « Paramètres de paie de l'employeur » en haut de l'onglet.
+- Chaque chauffeur : Référentiels › Chauffeurs › lien « 💼 Paie » sous le nom
+  (salaire brut mensuel, embauche, matricule, CIN, N° CNSS, situation familiale,
+  enfants, prime imposable, indemnités non imposables, RIB).
+- Livre de paie du mois : heures sup (25 % / 50 %), prime du mois, ancienneté,
+  CNSS 4,48 % (plafond 6 000), AMO 2,26 %, IR (frais pro, barème, charges de
+  famille), avances, net, charges patronales ; montants CNSS et IR à déclarer ;
+  export Excel. Bulletin imprimable / PDF (un ou tous).
+- Quand un brut de paie est saisi, le net du bulletin devient le montant à payer
+  dans l'onglet Salaires. Faites vérifier le premier bulletin par votre comptable.
+- Quand un chauffeur a pris des congés payés (ou maladie) dans le mois, le
+  bulletin affiche une ligne « Indemnité de congés payés » (ou « … de
+  maladie ») séparée de « Salaire de base », chacune avec son nombre de jours
+  et son montant ; le total ne change pas, c'est seulement le détail qui est
+  éclairci. S'il n'y a aucun congé dans le mois, une seule ligne « Salaire de
+  base » s'affiche, comme avant.
+
+CONGÉS PAYÉS (solde par chauffeur)
+- Acquis : 1,5 jour par mois travaillé (+ 1,5 j par 5 ans d'ancienneté, 30 j/an
+  maximum). Pris : absences « Congé payé » dans Référentiels › Indisponibilités.
+- Solde = report + acquis − pris : sous le nom du chauffeur (Référentiels ›
+  Chauffeurs), dans sa fiche « 💼 Paie », sur le bulletin et dans le tableau
+  « Congés payés » de Rapports › Bulletins de paie.
+- Report : dans la fiche « 💼 Paie », indiquez le solde qu'il avait déjà et la
+  date ; seuls les mois suivants sont ajoutés automatiquement.
+- Référentiels › Chauffeurs : les colonnes RIB, type de salaire et montant sont
+  dans la fiche « 💼 Paie » (lien sous le nom).
+
+RAPPORTS : MENUS
+- Les onglets sont rangés en 5 menus : Le mois · Client & facturation ·
+  Sous-traitants · Chauffeurs & paie · Rentabilité (sous-onglets en dessous).
+
+DOCUMENTS RH (Rapports › Chauffeurs & paie › Documents RH)
+- Attestation de travail, attestation de salaire (moyenne des 3 derniers mois),
+  certificat de travail, reçu pour solde de tout compte (art. 72 et 73 du Code
+  du travail). Choisir le chauffeur puis le document → Imprimer / PDF.
+- Solde de tout compte : date de départ, congés à payer (par défaut le solde),
+  préavis et licenciement si besoin ; repris sur le dernier bulletin de paie.
+
+CALENDRIER DES CONGÉS (Rapports › Chauffeurs & paie)
+- Grille du mois : congés, maladie, absences, départs ; alerte quand trop de
+  chauffeurs sont absents le même jour (limite réglable).
+
+FICHIER DE VIREMENT DES SALAIRES (Rapports › Salaires)
+- « 🏦 Fichier de virement » : Excel bénéficiaire / RIB / montant / motif pour la
+  banque en ligne (salaires cochés, ou tous ceux à payer).
+
+FICHE CHAUFFEUR (lien « fiche → »)
+- Tout sur une page : identité, documents, trajets et jours du mois, absences,
+  congés, bons gasoil, note du mois, paie, 12 derniers mois. Accès depuis
+  Référentiels › Chauffeurs, Suivi chauffeurs, Salaires, fiche véhicule.
+
+RÉGLAGES DU SERVEUR (plus de config.json)
+- Paramètres › Serveur et accès réseau : accès réseau / téléphone, mot de passe
+  réseau, port, copie supplémentaire des sauvegardes, durée des copies.
+- Enregistrés dans donnees\reglages-serveur.json : à la mise à jour, il suffit
+  de garder le dossier donnees\. Un ancien config.json est repris
+  automatiquement au premier lancement ; vous pouvez ensuite le supprimer.
+- Port et activation de l'accès réseau : relancer le serveur pour appliquer.
+  Depuis un téléphone, on ne peut pas couper l'accès réseau (pour ne pas
+  être déconnecté) : le faire sur l'ordinateur principal.
+
+POINTAGE PAR EXCEPTION (Pointage)
+- Chaque matin, la fiche du jour est créée toute seule avec tous les trajets
+  cochés (sauf trajets « à vérifier », occasionnels, chauffeur ou véhicule
+  indisponible). Un bandeau demande de décocher ce qui n'a pas été fait, puis
+  « ✓ J'ai vérifié la fiche ».
+- Une seule fiche même si plusieurs appareils sont ouverts.
+- Case à cocher pour activer / désactiver ; bouton « ⚡ Créer la fiche » pour
+  la créer tout de suite.
+
+SAISIE RAPIDE DES BONS GASOIL (Gasoil › ⌨ Saisie rapide, sur ordinateur)
+- Tableau comme Excel : Entrée passe à la case suivante, puis au bon suivant ;
+  la date est recopiée. Immatriculation avec quelques chiffres ; chauffeur
+  proposé selon le planning.
+- Contrôles en direct : véhicule inconnu, prix au litre, km en arrière,
+  N° de bon déjà utilisé. « Enregistrer » garde les bonnes lignes ; les
+  lignes en erreur restent à l'écran pour être corrigées.
+
+RAPPEL DE FIN DE JOURNÉE (à partir de 18 h)
+- Bandeau en haut : fiche du jour manquante, fiche automatique pas vérifiée,
+  trajets non cochés, absences de demain. « Plus tard » le cache 1 heure.
+
+FIN DE MOIS (Rapports)
+- Barre d'avancement (étapes faites / total), nouveaux contrôles : bons
+  gasoil suspects, contrôle km, fiches de paie. Les paiements pas encore dus
+  sont « à venir », pas « en retard ».
+- Bouton « 🔒 Clôturer le mois » actif quand le mois est terminé et qu'il ne
+  reste plus d'étape rouge.
+
+FONCTIONNALITÉS (Tableau de bord › « 🧩 Fonctionnalités », ou Paramètres)
+- Activer / désactiver les fonctions optionnelles (saisie rapide, fiches,
+  rapports, paie & RH, outils…). Une fonction désactivée disparaît des écrans
+  (boutons, menus, onglets) et ses rappels s'arrêtent, pour tous les
+  utilisateurs. Les données restent : la réactiver fait tout revenir.
+- Seul un compte avec le droit « Paramètres » peut changer ces choix.
+- Chaque nouvelle fonction est signalée sur le tableau de bord (« 🆕 … ») :
+  « Tout garder » ou « Choisir ».
+
+DATES SUR TÉLÉPHONE
+- Les cases date s'affichent correctement dans les cartes (Échéances,
+  Saisie rapide, Chauffeurs…). Un bouton ✕ à côté d'une date permet de la
+  vider.
+
+CHAUFFEURS EN CARTES (Référentiels › Chauffeurs)
+- Une carte par chauffeur : téléphone, boutons « 📞 Appeler » et
+  « 💬 WhatsApp » (mobiles 06 / 07), date d'embauche et ancienneté, jours
+  travaillés du mois, payé par, paie, actif.
+- « ✎ Modifier » : nom, téléphone (vérifié : 06 12 34 56 78, +212…),
+  date d'embauche, date de démission. Un numéro invalide est refusé ; les
+  anciens numéros invalides sont signalés « numéro à corriger ».
+- « Départ » s'appelle maintenant « Date de démission » (aussi dans la fiche
+  de paie et les Documents RH).
+
+FICHE DU JOUR SUR TÉLÉPHONE
+- Ligne ouverte (✎) : kilométrage et montant de la ligne à côté de la
+  société et de la marque. En bas : total du jour (trajets, A/R, km, DH).
+
+RÉFÉRENTIELS EN CARTES (Véhicules, Trajets, Clients, Sociétés)
+- Même présentation que les chauffeurs : informations lisibles + « ✎ Modifier ».
+  Sur la carte : statut / loyer (véhicules), jours de repos (trajets), actif.
+- Sociétés : RIB (24 chiffres vérifiés), ICE, adresse, téléphone avec
+  « Appeler » et « WhatsApp ».
+- Prestataire / loueur d'un véhicule : liste des sociétés avec recherche
+  (tapez 2-3 lettres) ; « + Nouvelle société » pour en créer une.
+
+TARIF / DISTANCE D'UN TRAJET À PARTIR D'UNE DATE (Référentiels › Trajets)
+- « ✎ Modifier » : choisir la date à partir de laquelle le changement
+  s'applique. Les fiches déjà saisies à partir de cette date sont mises à jour
+  (sauf mois clôturés) ; celles d'avant gardent l'ancien tarif. Une date
+  future programme le changement (annoncé sur la carte).
+- « historique des tarifs » : liste des tarifs ; ✕ annule un changement.
+
+ÉCHÉANCES DANS LES CARTES
+- L'onglet « Échéances » est supprimé : les dates des documents se saisissent
+  dans la carte du véhicule (assurance, visite, vignette, autorisation) ou du
+  chauffeur (permis, carte pro, visite médicale). Rouge = expiré,
+  orange = bientôt, vert = à jour.
+- « Voir seulement ceux-là » : cartes avec documents à renouveler.
+
+TARIF / DISTANCE D'UN TRAJET À PARTIR D'UNE DATE (Référentiels › Trajets)
+- « ✎ Modifier » : nouvelle distance / nouveau tarif + « appliquer à partir
+  du … ». Les fiches à partir de cette date sont mises à jour (sauf mois
+  clôturés) ; celles d'avant gardent l'ancien tarif. Date future = changement
+  programmé (annoncé sur la carte).
+- Toute fiche créée ensuite prend le tarif en vigueur à sa date.
+- « Historique des tarifs » sur la carte ; ✕ annule un changement.
+
+ÉCHÉANCES DANS LES CARTES
+- L'onglet « Échéances » est supprimé : les documents (assurance, visite,
+  vignette, autorisation / permis, carte pro, visite médicale) se voient et
+  se saisissent dans la carte du véhicule ou du chauffeur (« ✎ dates »).
+- Bandeau « Documents expirés ou bientôt » + « Voir seulement ceux-là ».
+
+HISTORIQUE SUR CHAQUE CARTE (Référentiels)
+- « 🕘 historique » : les modifications du véhicule, chauffeur, trajet,
+  client ou société, avec la date et l'auteur.
+
+CONTRÔLES : DOUBLES AFFECTATIONS ET ÉCARTS DE TARIF
+- Même véhicule / chauffeur sur plusieurs trajets le même jour (hors planning
+  habituel) : ⚠ sur la ligne du pointage + rubrique dans Contrôles.
+- Ligne de fiche avec un tarif / une distance différent du tarif en vigueur à
+  sa date : ⚠ + « corriger ».
+
+RÉCAP VOYAGES : INFORMATIONS AU CHOIX (Rapports › Client & facturation)
+- « Afficher » : Détail complet, Par véhicule, Véhicule + chauffeur, Par
+  trajet, Trajet + véhicule, Par chauffeur, Par site, Par sous-traitant, ou
+  « ⚙ choisir les colonnes ». Lignes regroupées, chiffres additionnés.
+- Export Excel et « 🖨 Imprimer » suivent l'affichage. Choix gardé sur
+  l'appareil.
+
+COÛT RÉEL AU KM (Rapports › Rentabilité)
+- Par véhicule : gasoil, réparations, loyer / charges fixes, part du chauffeur
+  (ou montant dû au sous-traitant) ramenés au km, comparés au CA / km.
+
+PRÉVISION DE TRÉSORERIE (Rapports › Le mois)
+- Saisir le solde en banque : solde prévu semaine par semaine sur 8 semaines
+  (factures à encaisser, sous-traitants, loyers, salaires, charges, gasoil et
+  réparations moyens). Alerte si le compte passe en négatif.
+
+AFFICHAGE PAR APPAREIL (menu › 📱 Affichage)
+- Mode sombre, grande police, ouvrir directement sur la fiche du jour.
+- Raccourci sur l'écran d'accueil : Chrome ⋮ ou Safari ⬆ → « Ajouter à
+  l'écran d'accueil ». L'icône TMT s'ouvre sur la fiche du jour.
+
+RAPPORTS › CHAUFFEURS
+- L'onglet « Suivi chauffeurs » est supprimé. L'onglet « Chauffeurs » montre
+  les voyages jour par jour.
+- Clic sur le nom : fiche du chauffeur. Clic sur un nombre : les trajets du
+  jour (aller, retour ou A/R complet) + lien vers la fiche du jour.
+- Choix : « Chauffeur par société » ou « Chauffeur — toutes sociétés ».
+
+RÉCAP VOYAGES : COMPARER AVEC UN AUTRE MOIS
+- « Comparer avec » : mois précédent, même mois l'an dernier ou un autre
+  mois. Colonnes du mois comparé + écart (vert / rouge) pour A/R, Km, Total.
+
+PNEUS (fiche véhicule)
+- « + Poser un pneu » : position, date, km, marque, dimension, prix, durée
+  prévue. Usure d'après le compteur, coût pour 1 000 km, alerte à 90 % et à
+  100 %. « Retirer / remplacer » garde l'historique. Le prix peut être ajouté
+  aux Réparations.
+
+TÉLÉPHONE
+- Rapports Chauffeurs, Salaires, Bulletins de paie en tuiles lisibles ;
+  factures, relevés et bulletins réduits à la largeur de l'écran.
+
+POINTAGE PAR EXCEPTION : OCCASIONNELS
+- La fiche automatique contient aussi les trajets occasionnels du planning,
+  non cochés (en violet, « ⚠ Trajet occasionnel — à vérifier ») : cochez
+  Aller / Retour s'ils ont roulé.
+- Un occasionnel non coché n'est ni compté ni facturé, ne déclenche pas
+  d'alerte, et « Confirmer la fiche » le retire. La fiche reste « Complet ».
+
+OCCASIONNELS INTELLIGENTS (Référentiels › Planning type)
+- D'après les 30 derniers jours : un occasionnel qui roule ≥ 80 % des jours
+  → « Passer en quotidien » ; un quotidien fait ≤ 20 % → « Passer en
+  occasionnel ». « Ignorer » masque la suggestion. Aussi dans Contrôles.
+
+FICHE AUTOMATIQUE NON VÉRIFIÉE
+- Carte « Pointage par exception » : heure du rappel (12 h par défaut).
+- Après cette heure : bandeau « pas encore vérifiée ». Le lendemain : « Ce
+  matin » sur le tableau de bord. Contrôles : fiches non vérifiées du mois.
+
+VÉHICULE AVEC PLUSIEURS CHAUFFEURS
+- Plus d'alerte quand un véhicule fait plusieurs trajets avec le même
+  chauffeur. Alerte seulement si le même véhicule a plus d'un chauffeur dans
+  la journée (ligne du pointage + Contrôles).
+
+PLANNING DE LA SEMAINE (menu « Planning semaine »)
+- Lundi → dimanche : chauffeur et véhicule de chaque trajet ; fait / pas
+  fait / prévu / occasionnel / absent ou garage / repos / changement.
+- « 💬 Messages de demain » : un message par chauffeur (Copier, WhatsApp).
+
+STATIONS (Gasoil › ⛽ Stations)
+- Champ « Station » sur chaque bon. Prix moyen au litre par station et
+  économie possible avec la moins chère.
+
+PLEIN ANORMAL
+- Litres > réservoir du véhicule (« ✎ Modifier » du véhicule, 100 L par
+  défaut) : alerte à la saisie et bon suspect.
+
+TABLEAU DE BORD PERSONNALISABLE
+- « ⚙ Personnaliser » : blocs affichés et ordre (réglage par appareil).
+
+MESSAGES AUX SOUS-TRAITANTS
+- Rapports › Sous-traitants : « 💬 message » avec le relevé du mois.
+
+FERMES / STATIONS / SITES × TARIFS
+- Clic sur un nombre de voyages : chauffeurs qui ont fait ce trajet ce jour.
+- Sur téléphone : cartes lisibles (jours en calendrier).
+
+JOURS SANS VOYAGE (Fermes, Stations, Chauffeurs)
+- Affichés « 0 » (rouge pâle). Sur téléphone, tous les jours du mois sont
+  dans le calendrier ; total A/R et montant toujours en bas de la carte.
+
+SAISIE EXPRESS (un trajet sur tout le mois)
+- Pointage › « ⚡ Saisie express » : choisir le mois, le trajet (chauffeur et
+  véhicule repris du planning), puis toucher les jours : A/R → A → R → vide.
+  Boutons : Tous les jours A/R, Sauf jours de repos, Vider, Annuler.
+- Signalés : repos du trajet (hachuré), chauffeur absent / véhicule
+  indisponible (rouge), trajet déjà fait par un autre chauffeur (violet).
+- Jours à venir et mois clôturés : non modifiables. Jour sans fiche : la
+  fiche est créée depuis le planning (autres trajets non cochés).
+- Désactivable dans 🧩 Fonctionnalités.
+
+FERMES / STATIONS : COUVERTURE DES TRAJETS
+- Jour sans voyage sur une ligne : « ↔ » gris si un autre chauffeur ou un
+  autre véhicule a fait le trajet (normal, clic = qui l'a fait) ; « 0 » rouge
+  seulement si personne ne l'a fait ; « R » repos ; « P » pause ; « · » pas
+  de fiche ou jour à venir. Encadré en haut : jours non couverts.
+- Saisie express : jours faits par un autre « ↔ NOM », jours sans personne
+  « 0 » ; bouton « Jours libres seulement ».
+
+TRAJET ARRÊTÉ OU EN PAUSE ?
+- Un trajet QUOTIDIEN du planning pas fait depuis 4 jours ou plus (repos et
+  jours sans fiche non comptés) : question dans « Ce matin » et Contrôles.
+- Réponses : en pause (date de reprise ou vide), passer en occasionnel,
+  il a été fait (Saisie express), arrêté définitivement, ignorer.
+- En pause : pas dans la fiche automatique ni « depuis le planning » ;
+  reprise automatique à la date prévue. Référentiels › Trajets :
+  « ⏸ Mettre en pause » / « Modifier / reprendre ».
+
+TRAJETS À PLUSIEURS POSTES (même destination, véhicules différents)
+- Référentiels › Planning type : encadré « Trajets à plusieurs postes »,
+  badge « Poste 1 / 2 » sur chaque ligne, « ⚠ doublon possible » si le même
+  véhicule est deux fois sur le même trajet.
+- Saisie express : choisir le poste à remplir ; « 0 1/2 » = l'autre poste a
+  roulé, celui-ci non (à remplir) ; « ↔ » seulement si tous les postes sont
+  faits par d'autres.
+- Fermes / Stations : poste manquant en « 0 » rouge, encadré « 10 (1/2) ».
+
+SÉPARER UN TRAJET (✂)
+- Référentiels › Planning type (encadré « Trajets à plusieurs postes ») ou
+  carte du trajet : « ✂ Séparer ». Chaque ligne du planning devient un
+  nouveau trajet (« … 1 », « … 2 »), même distance / tarif / client / repos.
+- Par défaut, seuls les voyages du mois courant sont déplacés ; les mois
+  précédents gardent l'ancien trajet (mis en inactif). Voyages avec un
+  véhicule et un chauffeur inconnus : « à vérifier », vous choisissez.
+
+ENTRETIEN SUR LA CARTE VÉHICULE
+- Référentiels › Véhicules : entretien le plus urgent (« Vidange : dans
+  500 km »), « ✓ fait » ouvre la fiche d'entretien préremplie.
+
+EXPORT COMPTABLE
+- Rapports › « 📒 Export comptable » : un fichier Excel du mois (résumé,
+  ventes HT / TVA / TTC, sous-traitants, locations, paie, gasoil,
+  réparations, caisse).
+
+TRAJET ARRÊTÉ / OCCASIONNEL DANS FERMES / STATIONS
+- « ⛔ Arrêté définitivement » demande la date d'arrêt (proposée : lendemain
+  du dernier voyage). Carte du trajet : « ⛔ Arrêté depuis le … », « ✎ date »,
+  « ▶ Remettre en service ».
+- Fermes / Stations : « — » gris à partir de la date d'arrêt (ou avant le
+  début de service), pas de « 0 » rouge ni de jour non couvert.
+- Trajets occasionnels : jours sans voyage « · » gris (pas de « 0 » rouge).
+- Aujourd'hui : « · » = pas encore saisi.
+
+FERMES : TRAVAIL UN JOUR DE REPOS
+- Voyage fait un jour de repos du trajet : case orange avec « R » dans le
+  coin + encadré « jour(s) travaillé(s) un jour de repos » (clic = fiche).
+
+ABSENCES : UNE SEULE ALERTE
+- Contrôles › Absences : une ligne par absence (« congé demain jusqu'au … »,
+  « aujourd'hui jusqu'au … », nombre de jours), plus une ligne par jour.
+- Alertes : une absence signalée aujourd'hui n'est pas répétée pour demain.
+
+PLANNING SEMAINE : ABSENCES
+- Encadré « Absences et garage » : une ligne par absence avec sa vraie
+  période (« Congé payé du Ve 18/09 au Me 30/09 »).
+- Chauffeur démissionnaire : plus listé comme absent ; signalé seulement
+  s'il est encore au planning type (« choisir un remplaçant »). Cases du
+  planning : « (parti) ».
+
+ENTRETIEN : VÉHICULES SUIVIS
+- Réparations › Entretien : encadré « Véhicules suivis » — cochez les
+  véhicules dont vous suivez vidange / filtres (Tout cocher, Tout décocher,
+  Automatique = propriété + location). Carte véhicule : « 🛢 Suivre
+  l'entretien » / « ✕ ».
+- Couverture Fermes / Stations, jours de repos travaillés et « — » des
+  trajets arrêtés : fonctionnement de base (plus dans Fonctionnalités).
+
+MISE À JOUR DEPUIS L'APPLICATION (à partir de cette version)
+- Paramètres › « ⬆ Mise à jour du programme » › « 📦 Choisir le fichier
+  .zip… » : choisissez TMT-Gestion-SQL.zip (depuis le PC ou le téléphone).
+- Le serveur vérifie le fichier, copie la base (sauvegardes\…-avant-mise-a-
+  jour.db), garde l'ancienne version (dossier « serveur.precedent »),
+  remplace le dossier « serveur » et redémarre tout seul. Le dossier
+  « donnees » n'est pas touché. Les autres postes : « Recharger ».
+- Si la nouvelle version ne démarre pas : l'ancienne est remise toute seule.
+  « ↩ Revenir à la version précédente » et « ⟳ Redémarrer le serveur » sont
+  dans la même carte. Réservé au gérant (droits Paramètres + Utilisateurs).
+- Cette version-ci s'installe encore à la main (une dernière fois).
+
+DEUX PAQUETS À CHAQUE VERSION
+- TMT-Gestion-MISE-A-JOUR.zip : seulement les fichiers changés (plus petit).
+  Accepté seulement si la version installée est la précédente ; sinon
+  refusé sans rien changer → utilisez le paquet complet.
+- TMT-Gestion-SQL.zip : complet (première installation, nouveau PC, version
+  sautée). Les deux s'installent dans Paramètres › Mise à jour du programme.
+
+ESTIMATION DE LA FACTURE DU MOIS
+- Tableau de bord (et Rapports › Facture, mois en cours) : réalisé + prévu
+  (trajets quotidiens du planning, jours habituellement travaillés) +
+  occasionnels au rythme moyen ; comparaison avec le mois dernier.
+
+EXCEL
+- Montants : 2 décimales (2 764,50) ; autres nombres sans virgule (21).
+- Client & facturation : « Excel » = exactement ce qui est à l'écran
+  (facture avec en-tête et totaux, colonnes choisies, cases ↔ / — / R…).
+
+PERSONNEL ADMINISTRATIF
+- Rapports › Salaires / Bulletins de paie : « 🏢 Personnel administratif »
+  (+ Ajouter, 💼 Fiche de paie). Salaire exact chaque mois (26 jours, sans
+  absences), bulletins, livre de paie, salaires à payer, résultat, export.
+
+ÉCRAN AU DÉMARRAGE
+- Paramètres (ou Menu › 📱 Affichage) : « 🏠 Écran au démarrage », par
+  appareil ; respecté aussi depuis l'icône du téléphone.
+
+NOMS DES PAQUETS
+- Chaque paquet porte la date et l'heure de la version, par exemple
+  TMT-Gestion-MISE-A-JOUR_2026-09-25_21h55.zip et
+  TMT-Gestion-SQL_2026-09-25_21h55.zip : pas de doublon « (1) » au
+  téléchargement, et on voit tout de suite quelle version on installe.
+
+SITES × TARIFS SUR TÉLÉPHONE
+- Liste compacte : total du mois et par tarif en tête ; une ligne par site
+  (A/R, montant, tarifs roulés « 300 DH × 50 », barre de part du CA) ;
+  tri par site ou par montant ; la recherche filtre la liste. PC inchangé.
+
+CORBEILLE
+- Menu › Corbeille (et Paramètres) : tout ce qui est supprimé (bon gasoil,
+  dépense, caisse, véhicule, chauffeur, trajet, planning, client, personnel
+  administratif, tâche) y reste 30 jours ; « Restaurer » le remet en place.
+
+À FAIRE (TÂCHES ET RAPPELS)
+- Menu › À faire, bloc « 📝 À faire » du tableau de bord : une tâche avec
+  une date de rappel, liée ou non à un véhicule ou un chauffeur. Le jour
+  venu (ou en retard), elle apparaît dans « Ce matin » avec « ✓ Fait ».
+  Carte d'un véhicule : « + tâche / rappel ».
+
+RAPPORT DU GÉRANT (PDF)
+- Rapports › Le mois › Rapport du gérant : le mois choisi uniquement —
+  chiffres clés (CA, résultat et marge, voyages, km, gasoil L/100),
+  graphiques (CA par jour, « Où va le chiffre d'affaires », meilleurs
+  sites), charges en % du CA, rentabilité des véhicules de la flotte (plus
+  et moins rentables), à encaisser / à payer, points à surveiller.
+  « 🖨 Imprimer / PDF » (2 pages A4).
+
+FOURNISSEURS
+- Menu › Fournisseurs : garages, pièces, stations, pneus, assurances,
+  lavage… (téléphone, contact, adresse, ICE, RIB, notes) et total dépensé
+  chez chacun (réparations, sorties de caisse, bons gasoil de la station,
+  achats de stock) sur la période choisie ; fiche avec historique ; Excel.
+- Réparation / sortie de caisse : champ « Fournisseur » (choisir ou taper
+  un nouveau nom). Stations des bons gasoil : bouton « Les ajouter ».
+
+RENTABILITÉ PAR VÉHICULE
+- Rapports › Rentabilité › Rentabilité par véhicule (ancien « par
+  trajet ») : pour chaque véhicule, CA, coûts (sous-traitance, véhicule :
+  gasoil, charges, loyer, réparations, consommables ; chauffeur ; frais de
+  caisse : péage…), marge, coût / km et CA / km ; filtre nos véhicules /
+  sous-traitants ; période 1 à 12 mois. Clic sur un véhicule : coût par
+  rubrique (gasoil, réparations, charges fixes et loyer, consommables,
+  chauffeur, frais de caisse, sous-traitance) ; clic sur « De quoi est fait
+  le coût » ou sur une rubrique : détail ligne par ligne (bons, réparations,
+  part du salaire…) ; détail par trajet (coût, prix conseillé).
+
+JOURNAL ET SÉCURITÉ
+- Menu › Journal (droit Utilisateurs) : chaque ajout / modification /
+  suppression (qui, quand, poste, avant → après), connexions et mots de
+  passe refusés ; filtres, recherche, Excel ; gardé 400 jours.
+- Tableau de bord : « 🚨 Suppression importante » quand 10 éléments ou plus
+  (100 lignes de pointage) sont supprimés d'un coup → Voir / Vu.
+- Paramètres › Sécurité : déconnexion automatique après 15 min … 4 h sans
+  activité (avertissement 1 minute avant).
+
+STOCK PIÈCES ET CONSOMMABLES
+- Menu › Stock pièces. Pièces : « + Achat » (prix moyen), « − Sortie » vers
+  un véhicule = réparation créée au prix moyen ; seuil d'alerte.
+- Consommables sur une période (ex. disques tachygraphe : 1 paquet = 3 mois
+  dans un véhicule) : achat = réserve ; « → Affecter » à un ou plusieurs
+  véhicules ; le prix est réparti sur la durée (rentabilité du véhicule,
+  résultat du mois) ; alerte 15 jours avant la fin et quand la réserve
+  atteint le seuil.
+
+SALAIRE RETENU SUR LES PRESTATAIRES
+- Référentiels › Chauffeurs : pour un chauffeur de notre société (CNSS,
+  bulletin de paie, salaires : inchangés), cocher « Salaire retenu sur les
+  prestataires ».
+- Chaque mois, sur le relevé de chaque prestataire, au prorata des jours
+  passés sur ses véhicules (pointage ; un jour partagé : au prorata des
+  voyages) : « Salaire net » (net du bulletin, avant avances) et
+  « Cotisations CNSS » (salariale CNSS + AMO, patronale CNSS + allocations
+  familiales + AMO + formation). Les jours sur nos véhicules restent à
+  notre charge. Mêmes mois que le gasoil, avant la commission.
+
+RENTABILITÉ PAR VÉHICULE : SOUS-TRAITANCE EN TTC
+- Le coût de la sous-traitance est compté TTC (TVA du sous-traitant
+  comprise) ; le chiffre d'affaires reste HT.
+
+PAIEMENTS RÉGLÉS AVANT L'APPLICATION
+- Rapports › Chauffeurs & paie › Salaires : « Suivi des paiements dans
+  l'application à partir de » (ex. 08/2026). Les mois d'avant (salaires,
+  sous-traitants, loyers, factures) sont « Réglé hors application » et ne
+  donnent plus d'alertes.
+
+BULLETINS DE PAIE : HEURES SUP. ET PRIMES
+- Rapports › Chauffeurs & paie › Bulletins de paie : bouton « + Prime /
+  H. sup » par salarié (heures sup. 25 / 50 / 100 %, prime du mois,
+  indemnité non imposable) ; étiquettes sur la ligne ; « ✎ Modifier ».
+- Sur téléphone : une carte par salarié (net à payer en évidence).
+- Jours de repos prévus au planning (repos du trajet), non travaillés :
+  comptés comme jours payés (26 j si tous les autres jours sont
+  travaillés). Salaire par jour : inchangé.
+
+REPRENDRE EN INTERNE ? (SIMULATION)
+- Rapports › Rentabilité › Reprendre en interne ? : pour chaque trajet
+  sous-traité, coût actuel TTC et coût estimé avec nos véhicules
+  (véhicules × (charges + chauffeur) + km × (gasoil + entretien)), gain par
+  mois / par an ; hypothèses modifiables.
+
+ANOMALIES DU POINTAGE
+- Menu › Contrôles › « 🔎 Anomalies du pointage » : trajet hors planning
+  type, véhicule qui roule plus de 1 200 km sans bon gasoil ; alerte au
+  tableau de bord.
+- Contrôles : pastilles en haut, rubriques repliables (repliées sur
+  téléphone), 8 points puis « Voir les N autres ».
+
+CONTRÔLE FACTURE ↔ POINTAGE
+- Rapports › Facture : voyages sans tarif, écarts de tarif, jours sans
+  voyage, lignes non cochées ; après l'envoi, alerte si le pointage change
+  (complément ou avoir).
+
+CONSOMMATION PAR CHAUFFEUR
+- Rapports › Chauffeurs & paie › Consommation par chauffeur : L/100 de
+  chaque chauffeur sur un même véhicule (pleins partagés selon le
+  pointage) ; alerte à +20 % par rapport aux autres chauffeurs.
+
+PRÉVISION DE PAIE ET DÉCLARATIONS
+- Rapports › Salaires : dès le 20, estimation des salaires nets, CNSS et
+  IR du mois ; déclarations du mois précédent (CNSS avant le 10, IR avant
+  la fin du mois) à marquer versées (« Paiements… ») ; alertes.
+
+DÉRIVE DU COÛT AU KM
+- Alerte quand le coût au km d'un de nos véhicules monte 3 mois de suite
+  (+20 %), avec la cause principale.
+
+BON GASOIL « ATTENDU »
+- Bon gasoil rapide : compteur et litres attendus d'après le pointage ;
+  écart signalé.
+
+MENU « GASOIL & RÉPARATIONS »
+- Gasoil, Réparations, Stock pièces et Fournisseurs : une seule entrée du
+  menu, avec des onglets en haut de la page. « À faire » n'est plus dans le
+  menu (bloc « 📝 À faire » du tableau de bord, « tout voir → »).
+
+CONGÉS ANNUELS
+- Rapports › Chauffeurs & paie › Congés : « + Demande de congé »
+  (jours ouvrables, date de reprise, solde avant / après, chauffeurs déjà
+  absents), puis « Accorder » ou « Refuser ». Un congé accordé devient une
+  indisponibilité « Congé payé ». Soldes de tous les chauffeurs, calendrier
+  du mois (demandes en attente hachurées), titre de congé à imprimer ;
+  alerte au tableau de bord pour les demandes en attente.
+
+SIGNATURE ÉLECTRONIQUE
+- « ✍ Signer à l'écran » sur le bulletin de paie, le titre de congé, les
+  relevés chauffeur et prestataire (« Bon pour accord ») et les documents
+  RH : signature au doigt ou à la souris, imprimée sur le document.
+- Paramètres › Signature électronique : signature du gérant enregistrée
+  une fois, apposée en un clic ou automatiquement.
+- « ⚠ document modifié depuis la signature » si le document change ensuite.
+
+EXPORT COMPTABLE : JOURNAL DES ÉCRITURES
+- Rapports › 📒 Export comptable : mois, trimestre, année ou période ;
+  écritures débit / crédit (ventes, achats, sous-traitance, gasoil, paie,
+  banque, caisse) et balance, en Excel ou CSV. Comptes et TVA récupérable
+  modifiables : à faire valider par votre comptable.
+
+EXPORTS EXCEL AU MODÈLE DE LA SOCIÉTÉ
+- Rapports › Client & facturation : le bouton Excel de Facture, Récap
+  voyages, Fermes, Stations et Sites × Tarifs donne le fichier au modèle
+  de la société (logo, cadres, couleurs, formats KM / DH, totaux).
+- « 📗 Classeur récap » : les 5 feuilles dans un seul fichier.
+
+« REPRENDRE EN INTERNE ? » RETIRÉ
+- L'onglet de simulation de Rapports › Rentabilité a été supprimé.
+
+PLUS RAPIDE
+- Changer de page est jusqu'à 10 fois plus rapide (tableau de bord, pointage,
+  rapports…) : les alertes et les calculs du mois ne sont plus refaits à
+  chaque affichage, seulement quand les données changent. Cocher une case du
+  pointage est aussi plus fluide.
+- Onglets Paie, Congés, Documents RH, Coût au km, Trésorerie… jusqu'à 8 fois
+  plus rapides ; Consommation par chauffeur 9 fois plus rapide ; tris des
+  listes accélérés.
+
+CONSOMMATION PAR CHAUFFEUR (NOUVEL AFFICHAGE)
+- Chiffres clés (L/100 moyen, chauffeurs à surveiller, litres et DH en
+  trop), une carte par véhicule avec des barres, classement des chauffeurs.
+
+JOURS FÉRIÉS
+- Les jours fériés du Maroc ne sont plus comptés dans les congés (comme les
+  dimanches) : demande, solde, calendrier, titre de congé, bulletin.
+- Rapports › Congés › « 📅 Jours fériés » : liste de l'année modifiable
+  (fêtes religieuses selon la lune, jour exceptionnel).
+
+HISTORIQUE DU CHAUFFEUR
+- Fiche chauffeur › « 🕓 Historique » : frise jour par jour (travaillé,
+  congé, maladie, absence, férié) et journal (véhicules conduits, absences,
+  avances, salaires payés, documents signés, échéances).
+
+ONGLET SALAIRES
+- Chiffres clés (masse salariale, net, payé, reste à payer), alertes RIB
+  manquant et net négatif, réglages regroupés dans « ⚙ Réglages de la paie ».
+- « Contrôle salaire ↔ pointage » avant de payer : pointé un jour d'absence,
+  plus de 26 jours, jours sans pointage ni absence, fériés travaillés.
+
+ROTATION ET PRÉVISION DES ABSENCES
+- Contrôles › « 🔄 Rotation des véhicules » : chauffeur qui change souvent
+  de véhicule, véhicule conduit par beaucoup de chauffeurs.
+- Congés › « 🔮 Prévision des absences » : 13 prochaines semaines, semaines
+  au-delà de la limite, congés à planifier ; alerte au tableau de bord.
+- Fêtes religieuses des années suivantes (2028…) calculées automatiquement
+  (« prévision ») ; rappel au tableau de bord 10 jours avant chaque fête
+  pour confirmer la date ou la décaler d'un jour.
+
+DÉPART D'UN CHAUFFEUR
+- Fiche chauffeur › « 🚪 Départ… » : date et motif ; prorata du mois,
+  congés restants, avances reportées sur le dernier bulletin, indemnité de
+  licenciement estimée (art. 53, à valider) ; ouvre le reçu pour solde de
+  tout compte à signer ; alerte tant qu'il n'est pas signé.
+
+TAUX DE PAIE PAR ANNÉE
+- Rapports › Bulletins de paie › « 📅 Taux de paie » : CNSS, AMO, AF, TFP,
+  plafond, barème IR par année ; rappel en janvier.
+
+DOUBLE VALIDATION DES PAIEMENTS
+- Paramètres › « 🔐 Double validation » (5 000 DH par défaut) : un paiement
+  saisi par un compte non gérant au-delà du seuil reste en attente jusqu'à
+  validation par le gérant (alerte au tableau de bord).
+
+INVENTAIRE DU STOCK
+- Gasoil & réparations › Stock pièces › « 📋 Inventaire » : saisir les
+  quantités comptées ; écarts en quantité et en valeur ; « Valider »
+  enregistre les corrections (manques / excédents) ; les pertes entrent
+  dans le résultat du mois ; historique ; rappel après 35 jours.
+
+DÉCOMPTE CLIENT
+- Rapports › Client & facturation › « Décompte client » : importer le
+  fichier Excel du client (liste, grille sites × jours ou totaux) ;
+  comparaison site par site et jour par jour avec le pointage ; écarts en
+  voyages et en DH ; signalé dans le contrôle de la facture.
+- Quand le fichier du client précise un prix par site (colonne « Prix »
+  reconnue automatiquement), il est aussi comparé à votre tarif : tuile
+  « Prix différents » et colonnes « Prix client / Notre tarif / Écart
+  prix » dans le tableau par site — utile pour repérer un tarif différent
+  même quand le nombre de voyages est correct.
+
+TRANSPORTS OCCASIONNELS ET DEVIS
+- Rapports › Client & facturation › « Transports occasionnels » :
+  « + Nouveau devis » (mariage, excursion, autre client) : lignes de prix,
+  TVA, validité, mission (date, trajet, véhicule, chauffeur, passagers),
+  frais prévus → marge.
+- Devis imprimable (D-AAAA-NNN) avec « Bon pour accord » signable ;
+  Accepté / Refusé ; « Facturer » crée une facture séparée (FO-AAAA-NNN) ;
+  encaissements et reste à payer.
+- Compté dans le résultat du mois et l'export comptable, sans toucher au
+  pointage ni à la facture du client principal.
+- Alertes : mission aujourd'hui / demain, conflit avec le pointage, devis
+  expiré, transport non facturé, facture impayée depuis 30 jours.
+
+PARC PNEUS
+- Menu « Pneus » : tous les pneus en service, usure, filtres (à changer,
+  à prévoir, à permuter), achats sur 12 mois, comparaison des marques
+  (coût pour 1 000 km, km moyens jusqu'à l'usure).
+- Fiche véhicule › 🛞 Pneus : « ⇄ permuter » (changer de position ou
+  échanger deux pneus sans les retirer) et « 📏 mesure » (profondeur :
+  ≤ 3 mm à prévoir, ≤ 1,6 mm limite légale → à changer).
+- Permutation conseillée tous les 10 000 km (réglable), aussi dans Contrôles.
+
+RECHERCHE RAPIDE (Ctrl+K)
+- Cherche aussi : les fonctions (« inventaire », « congés »…), les n° de
+  facture / devis / bon gasoil, les réparations, pièces, pneus,
+  fournisseurs, et les montants (« 3 456,50 »).
+
+ATTESTATIONS
+- Fiche chauffeur › « 📄 Attestations ».
+- Nouveaux documents : domiciliation de salaire (banque, RIB, net moyen)
+  et ordre de mission (pré-rempli depuis un transport occasionnel,
+  bouton « 📄 Ordre de mission »).
+- Registre : chaque document imprimé reçoit un numéro AAAA/NNN (imprimé
+  en haut du document) et apparaît dans le registre du chauffeur.
+
+CARNET D'ENTRETIEN
+- Fiche véhicule › « 📘 Carnet d'entretien » : document imprimable
+  (vente, contrôle, assurance) : kilométrage, échéances des documents,
+  plan d'entretien (dernière / prochaine fois), historique des
+  interventions (garage, km, montant), pneus, immobilisations.
+- Période au choix (tout, 12 mois, une année) ; montants affichés ou non.
+
+VÉRIFICATION DES ICE
+- L'ICE doit avoir 15 chiffres ; les 2 derniers sont une clé de contrôle.
+  Un ICE faux est signalé sous le champ pendant la saisie, sur les cartes
+  des Référentiels, dans Contrôles › « ICE à vérifier » et dans le
+  contrôle de la facture (ICE du client faux ou manquant).
+
+NETTOYAGE ET VITESSE
+- Enregistrement plus rapide (surtout avec plusieurs années de données).
+- « Exporter tout le mois (Excel) » corrigé (erreur sur la page Fin de mois).
+- Rapports › Rentabilité : l'ancien onglet « Rentabilité » est retiré
+  (remplacé par « Rentabilité par véhicule ») ; le détail mensuel d'un
+  véhicule suivi s'ouvre toujours depuis Référentiels › Rentabilité.
+- Paramètres › Fonctionnalités : les fonctions en double (v2) sont
+  regroupées avec l'originale (Export comptable, Recherche rapide, Pneus,
+  Documents RH).
+- L'ancienne version « fichier HTML seul » n'est plus fournie.
+
+POINTAGE DANS L'ORDRE DU PLANNING TYPE
+- Les lignes de la fiche du jour suivent l'ordre du planning type
+  (Référentiels › Planning type, ordre réglé par glisser-déposer — poignée
+  « ⠿ » à gauche de chaque ligne, au doigt sur téléphone/tablette aussi).
+  Sur téléphone, les cartes sont compactes : Trajet, Véhicule, Chauffeur et
+  Type s'affichent en texte, un appui dessus ouvre la liste pour modifier.
+- Une ligne ajoutée plus tard (« + Ligne ») se range à sa place dès que son
+  trajet est choisi ; un trajet hors planning va à la fin.
+- Désactivable : Paramètres › Fonctionnalités.
+
+TRAJETS HORS CONTRAT
+- Alerte quand un chauffeur fait des trajets après sa date de démission /
+  départ (Référentiels › Chauffeurs) ou avant sa date d'embauche (fiche
+  Paie) : en tête des alertes du tableau de bord (« Voir → » ouvre la
+  fiche du jour), sur la ligne de la fiche, au moment de choisir le
+  chauffeur, et dans Contrôles › « Trajets hors contrat » (toutes dates).
+
+VÉRIFICATION DES RIB, CIN ET CNSS
+- RIB : 24 chiffres avec clé de contrôle (la banque s'affiche quand il est
+  bon) ; CIN : lettre(s) + chiffres ; CNSS : 9 chiffres ; doublons entre
+  personnes. Signalé sous le champ, dans Contrôles › « RIB, CIN et CNSS à
+  vérifier » et avant le fichier de virement des salaires.
+
+CONTRAT DE TRAVAIL
+- Rapports › Documents RH › « Contrat de travail » (ou fiche chauffeur ›
+  📄 Attestations) : CDI au modèle de la société (10 articles), rempli avec
+  la fiche du chauffeur (nom, CIN, date d'embauche) ; à compléter :
+  naissance, adresse. Employeur (raison sociale, gérante, CIN, siège)
+  modifiable dans la rubrique « Employeur ». Signature à l'écran, numéro au
+  registre RH.
+
+NUMÉROTATION DES FACTURES
+- Numéros en double, manquants ou dans le désordre (factures client et
+  transports occasionnels) : Contrôles › « Numérotation des factures »,
+  contrôle de la facture du mois, alerte au tableau de bord (doublon).
+
+CONGÉS ACQUIS AVANT L'APPLICATION
+- Les mois entre l'embauche d'un chauffeur et le premier mois saisi dans
+  l'application comptent automatiquement pour 1,5 jour de congé chacun.
+  Ensuite, seuls les mois travaillés comptent (comme avant).
+- Bouton « ✓ Activé / Désactivé » sur la carte « Congés payés »
+  (Rapports › Bulletins de paie), aussi dans Paramètres › Fonctionnalités.
+- Congés déjà pris avant l'application : les saisir en « Congé payé »
+  dans Référentiels › Indisponibilités (vraies dates), ou mettre un report
+  à une date dans la fiche 💼 Paie du chauffeur (le report remplace le
+  calcul jusqu'à cette date).
+
+CALENDRIER DES CONGÉS : CHAUFFEURS PARTIS
+- Rapports › Congés : un chauffeur parti (démission, départ) n'est plus
+  affiché ni compté comme absent après sa date de départ. L'alerte
+  « Trop de chauffeurs absents » ne compte que les vrais congés et absences.
+
+NOTES DE FRAIS
+- Caisse › « 🧾 Notes de frais » › « + Note de frais » : péage, parking,
+  lavage… payé par un chauffeur de sa poche, avec la photo du reçu
+  (appareil photo du téléphone).
+- « Rembourser » : par la caisse (sortie de caisse créée automatiquement)
+  ou avec le salaire du mois (ajouté au net à payer, ligne non imposable
+  sur le bulletin). « Refuser » avec un motif. « ↶ Annuler » remet la note
+  en attente et retire la sortie de caisse ou la ligne du salaire.
+- Alerte au tableau de bord tant qu'une note attend son remboursement.
+- Réservé aux comptes avec le droit « Caisse ». Désactivable dans
+  Paramètres › Fonctionnalités.
+
+CORRECTION : CONGÉS ACQUIS DU BULLETIN DE PAIE
+- Le tableau « Cumuls » du bulletin imprimé (colonne « Congés acquis »)
+  suit maintenant exactement les mêmes règles que le « Solde congés » :
+  pour un chauffeur, il tient compte des mois comptés automatiquement
+  avant les données de l'application (si l'option est activée) ;
+  auparavant ce cumul était trop bas.
+- Pour le personnel administratif, les congés ne s'accumulent plus tant
+  qu'aucune date d'embauche n'est renseignée sur sa fiche.
+
+NOUVEAU DESIGN
+- Habillage visuel modernisé : couleurs (bleu indigo), cartes et tuiles
+  avec ombres douces, boutons arrondis avec effet « ripple » au clic,
+  tableaux et badges plus lisibles. Aucun écran ni bouton n'a changé de
+  place ou de fonctionnement.
+- Correction : l'écran « Utilisateurs » pouvait rester bloqué (page figée)
+  si la liste ne se chargeait pas correctement ; c'est corrigé.
+
+RAPPORTS : RAPPORT PERSONNALISÉ
+- Nouvel onglet dans Rapports › 📅 Le mois › Rapport personnalisé.
+- Période libre (du … au …), avec des filtres au choix : prestataire,
+  véhicule, chauffeur, trajet, client, site, compte propre / sous-traitant.
+- Un ou plusieurs regroupements au choix (prestataire, véhicule, marque,
+  chauffeur, trajet, site, client, compte propre/sous-traitant, mois,
+  jour, jour de la semaine) et les données à afficher au choix (voyages,
+  aller, retour, km, montant, tarif moyen, gasoil saisi, véhicules /
+  chauffeurs / trajets / jours distincts) : toutes les combinaisons sont
+  possibles.
+- Export Excel du tableau obtenu.
+- Case « Comparer à la période précédente » : ajoute, pour chaque donnée
+  affichée, la valeur de la période immédiatement précédente (même durée)
+  et l'évolution en %.
+- Bascule « 📋 Tableau / 📊 Graphique » : le graphique le plus adapté au
+  regroupement et aux données choisis s'affiche automatiquement (Ligne
+  pour une évolution dans le temps, Anneau pour une répartition entre
+  peu de catégories, Colonnes ou Barres horizontales pour une
+  comparaison, Indicateurs (KPI) quand il n'y a pas de regroupement) —
+  pas besoin de choisir soi-même le type. Avec la comparaison à la
+  période précédente cochée, le graphique montre les deux périodes
+  côte à côte.
+
+RAPPORTS : DÉCOMPTE CLIENT — IMPORT PAR PHOTO ET PRIX
+- Rapports › Client & facturation › Décompte client : nouveau bouton
+  « 📷 Importer une photo », à côté de l'import Excel existant. À utiliser
+  quand le client n'envoie qu'une photo ou une capture d'écran (pas de
+  fichier). La photo s'affiche à l'écran, avec à côté un tableau (trajet /
+  site, prix et nombre de voyages) à remplir vous-même, avec
+  « + Ajouter une ligne » et une suppression ligne par ligne.
+- Le prix est optionnel dans le tableau (laissez vide si la photo n'en
+  montre pas). Quand plusieurs tarifs apparaissent pour le même site,
+  ajoutez une ligne par tarif : les voyages sont additionnés et le prix
+  moyenné automatiquement.
+- Une fois enregistrée, la photo reste consultable (bouton
+  « 📷 Voir la photo »), et les lignes saisies sont comparées au pointage
+  exactement comme un import Excel (écarts en voyages, en prix et en DH,
+  signalés dans le contrôle facture).
+
+RAPPORTS : EXPORTER UN ONGLET EN IMAGE
+- Sur tous les onglets de Rapports avec un export Excel, un nouveau bouton
+  « 📷 Exporter en image » (à côté de « Exporter cet onglet (Excel) »)
+  télécharge un PNG qui reprend exactement ce qui est affiché à l'écran
+  (titre, couleurs, mise en forme) — le tableau complet, colonnes non
+  coupées même s'il défile horizontalement à l'écran.
+- Dans Rapport personnalisé, disponible aussi bien en mode Tableau qu'en
+  mode Graphique : l'image capture alors le graphique affiché.
+- Utile pour partager ou imprimer un aperçu rapide sans passer par Excel.
+
+STATION : BONS SERVICE & PIÈCES
+- L'onglet Gasoil s'appelle désormais « Station », dans le menu
+  « Gasoil & réparations ». Vous pouvez y enregistrer, en plus des bons
+  gasoil habituels, les prestations faites à la station-service (lavage,
+  entretien…) et les pièces achetées (filtres, courroie…).
+- En cliquant sur « + Bon », choisissez d'abord le type : ⛽ Bon gasoil,
+  🧴 Service ou 🔧 Pièces. Les bons Service et Pièces demandent la date,
+  le véhicule, le chauffeur, un libellé libre et le coût (pas de
+  kilométrage ni de litres, non applicables).
+- Tous les bons (gasoil, service, pièces) apparaissent maintenant
+  ensemble dans un seul tableau, avec des cases à cocher « Afficher »
+  (⛽ Gasoil / 🧴 Service / 🔧 Pièces) pour choisir les types visibles —
+  par exemple gasoil et service, sans les pièces. Le rapport de
+  consommation habituel, en bas de l'écran, reste calculé uniquement
+  sur les bons gasoil, quelles que soient les cases cochées.
+
+CORRECTION : RESTER SUR LE MÊME ÉCRAN APRÈS UN RECHARGEMENT
+- Recharger la page (F5, ou actualiser sur le téléphone) vous laisse
+  maintenant exactement sur l'écran où vous étiez, avec le même mois /
+  la même date affichée — au lieu de revenir systématiquement sur
+  Pointage du jour.
+
+POINTAGE : RETROUVER UN TRAJET RENOMMÉ / RETIRÉ SUR UN MOIS PASSÉ
+- Renommer un trajet (Référentiels › Trajets) s'applique immédiatement
+  à tous les mois déjà enregistrés, sans exception : le nom affiché
+  partout (anciennes fiches comprises) est toujours le nom actuel.
+- Si un trajet a été désactivé (« ⛔ Arrêté définitivement » ou case
+  « Actif » décochée), il reste maintenant sélectionnable dans la liste
+  déroulante « Trajet » de Pointage du jour, sur n'importe quel mois —
+  repéré par la mention « (inactif) » — pour pouvoir corriger ou
+  compléter d'anciennes fiches.
+- Si un trajet arrêté est malgré tout affecté à une date postérieure à
+  son arrêt, un avertissement apparaît maintenant sous la ligne :
+  « Trajet arrêté depuis le JJ/MM/AAAA : non disponible à cette date ».
+
+CHANGEMENTS TEMPORAIRES : CHAUFFEUR / VÉHICULE DEVENU INACTIF
+- Dans « Changer un trajet du … au … » (bouton depuis Référentiels ›
+  Planning type), les listes « Nouveau chauffeur » et « Nouveau véhicule »
+  affichent maintenant TOUJOURS tous les chauffeurs et véhicules, même
+  ceux devenus inactifs depuis — repérés par la mention « (inactif) » —
+  pour pouvoir corriger ou compléter un changement sur une période
+  ancienne où ce chauffeur ou ce véhicule était encore en service.
+
+RÉPARATIONS & DÉPENSES : EXPORT EXCEL ET PHOTO
+- Réparations & dépenses dispose maintenant d'un bouton
+  « Exporter (Excel) » à côté de « + Dépense », qui télécharge le détail
+  du mois (véhicule, libellé, montant, entretien, kilométrage…).
+- Chaque dépense peut aussi recevoir une photo de la facture ou du reçu :
+  bouton « 📷 Ajouter une photo (facture / reçu) » dans la fiche, comme
+  pour les bons gasoil. Une icône 📷 apparaît sur les lignes ayant une
+  photo, pour la consulter directement depuis le tableau.
+
+STATION : PHOTO SUR LES BONS SERVICE / PIÈCES
+- Les bons Service et Pièces (station) peuvent désormais recevoir une
+  photo du reçu ou de la facture, exactement comme les bons gasoil.
+- L'export Excel de la Station (bouton « Excel ») inclut maintenant ces
+  bons Service et Pièces (avec leur type et leur libellé), en
+  respectant les cases « Afficher » cochées à l'écran.
+
+STATION : EXPORT EXCEL = LISTE DES BONS
+- Le bouton « Exporter (Excel) » de la Station est maintenant à côté de
+  « + Bon », en haut de l'écran (au lieu d'être en bas, à côté du rapport
+  de consommation) — plus facile à trouver.
+- Le fichier Excel ne contient plus qu'une seule feuille : la liste
+  détaillée de chaque bon (date, n°, véhicule, prestataire, chauffeur,
+  kilométrage, litres, coût…), sans le tableau de synthèse par véhicule
+  qui s'y trouvait avant. Le rapport « Consommation gasoil par véhicule »
+  reste bien sûr disponible à l'écran, juste plus dans ce fichier.
+
+CHANGEMENTS TEMPORAIRES : TRAJET DÉSACTIVÉ
+- Dans « Changer un trajet du … au … », la liste « Trajet » affiche
+  maintenant aussi les lignes de planning dont le trajet a été désactivé
+  depuis — repérées par la mention « (inactif) » — pour pouvoir corriger
+  un changement sur une période ancienne où ce trajet était encore actif.
+
+RÉORGANISER LES COLONNES DES TABLEAUX
+- Vous pouvez maintenant déplacer une colonne dans n'importe quel tableau
+  de l'application : cliquez sur l'en-tête de la colonne, maintenez, et
+  glissez-la à l'endroit voulu.
+- L'ordre choisi est mémorisé sur cet appareil (chaque type de tableau
+  garde son propre ordre) et réappliqué automatiquement à chaque
+  ouverture. Non disponible sur téléphone ou en vue « cartes ».
+
+⬆ MISE À JOUR DU PROGRAMME : REMONTÉE EN HAUT
+- Dans Paramètres, la carte « ⬆ Mise à jour du programme » est maintenant
+  toujours la première carte affichée, quel que soit le compte — plus
+  besoin de faire défiler la page pour la trouver.
+
+🔔 RAPPELS D'ALERTES (pop-up dans l'application)
+- Nouvelle carte Paramètres « 🔔 Rappels d'alertes » : un petit badge 🔔
+  apparaît en bas à droite de l'écran tant qu'il reste des alertes actives
+  dans les catégories que vous choisissez (documents à renouveler —
+  assurance, visite technique, permis… —, sous-traitants et loyers en
+  retard, salaires, factures, etc.). Aucune installation, aucun réglage
+  technique : ça fonctionne dès que l'application est ouverte dans le
+  navigateur, sur ordinateur comme sur téléphone.
+- Désactivé par défaut. « Choisir les catégories et le délai » : cochez
+  uniquement les alertes qui vous intéressent (les mêmes catégories que le
+  bouton « 🔔 Alertes » du tableau de bord — « Tout cocher »/« Tout
+  décocher » pour aller vite) et réglez le délai de rappel (en heures,
+  24 h par défaut).
+- Cliquez sur le badge pour ouvrir la liste des alertes actives. Pour
+  chacune : « ✓ Fait » (ne réapparaît plus, sur tous les postes du bureau)
+  ou « ⏰ Plus tard » (réapparaît après le délai réglé).
+- Le badge pulse doucement pour attirer l'œil sans être gênant (désactivé
+  automatiquement si votre navigateur/système est réglé pour réduire les
+  animations).
+- Remplace l'ancienne fonction « Notifications sur téléphone » (Web Push),
+  retirée : elle exigeait un accès sécurisé (HTTPS) via Tailscale, une
+  condition technique peu pratique pour un simple rappel. Ce nouveau
+  système, plus simple, n'alerte que lorsque l'application est ouverte
+  quelque part (pas de notification quand le téléphone est éteint ou
+  l'application fermée) — en usage normal de bureau, ça reste largement
+  suffisant.
